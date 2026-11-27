@@ -11,13 +11,13 @@ var ZH = {
     passport: "可可护照", passportSub: "已发现 {n} / {t} 项产品", rank: ["幼苗", "采果人", "发酵师", "巧克力大师"],
     cats: "三大系列", items: "{n} 项产品", needs: "您想找什么？",
     statLead: "研磨量约为产量的 1,100 倍", statText: "2025 年马来西亚研磨了 294,697 吨可可豆，而本地收成只有 268 吨。", statMore: "查看产业数据",
-    quizTitle: "您有多了解可可？", quizText: "六道小题，答案都在手册里。", quizGo: "开始问答", best: "最高分：{n}/{t}",
+    quizTitle: "您有多了解可可？", quizText: "六道小题，答案都在手册和期刊里。", quizGo: "开始问答", best: "最高分：{n}/{t}",
     short: { A: "种植", B: "护理", C: "食品" }, today: "今日精选", newest: "尚未发现", all: "全部", seeAll: "查看全部",
     search: "搜索产品", saved: "已收藏", count: "{n} 项产品", none: "没有符合的结果。请换个关键词，或清除筛选。", clear: "清除筛选",
     back: "返回", save: "收藏", unsave: "已收藏", share: "分享", page: "手册第 {n} 页", highlights: "产品亮点", about: "关于",
     health: "功效说明摘自马来西亚可可局的手册，仅供一般参考，并非医疗建议。",
     visit: "打开网站", getApp: "到 Google Play 下载", close: "关闭", rightAns: "正确答案：{a}", confirmReset: "要清除已发现的产品和问答分数吗？", citeFail: "无法复制，请手动选取文字。", saveFor: "保存：{t}", readPaper: "阅读论文（ResearchGate）", related: "您可能也喜欢", prev: "上一项", next: "下一项", copied: "链接已复制", savedMsg: "已收藏", removedMsg: "已移除",
-    qStart: "开始", qNext: "下一题", qFinish: "查看得分", qRight: "答对了！", qWrong: "答错了。", qSee: "了解这项产品", qHide: "收起产品介绍", qBack: "回到题目", qTry: "答错了，再选一个试试。", qShow: "显示答案", qShown: "答案在这里。", qRightRetry: "这次答对了！", qFirst: "只有第一次就答对才计分，不过请继续作答，找出正确答案。",
+    qStart: "开始", qNext: "下一题", qFinish: "查看得分", qRight: "答对了！", qWrong: "答错了。", qSee: "了解这项产品", qSeeJ: "了解这篇论文", qHideJ: "收起论文介绍", qHide: "收起产品介绍", qBack: "回到题目", qTry: "答错了，再选一个试试。", qShow: "显示答案", qShown: "答案在这里。", qRightRetry: "这次答对了！", qFirst: "只有第一次就答对才计分，不过请继续作答，找出正确答案。",
     qDone: ["继续探索吧，答案都在产品介绍里。", "不错！再多看几项产品就能拿满分。", "太棒了，您很了解可可。", "满分！真正的巧克力大师！"],
     qAgain: "再玩一次", qOf: "第 {n} 题，共 {t} 题", yourScore: "您的得分",
     indTitle: "数字看可可", indLead: "马来西亚如今种植的可可很少，却仍是世界主要的可可加工中心之一。",
@@ -233,7 +233,7 @@ var ZH = {
     var z = ZH.p[p.id]; if (!z) return;
     p.sub.zh = z.sub; if (p.desc && z.desc) p.desc.zh = z.desc; p.pts.zh = z.pts;
   });
-  if (QUIZ.length === ZH.quiz.length) QUIZ.forEach(function (q, i) {
+  if (QUIZ.length === ZH.quiz.length) QUIZ.forEach(function (q, i) {   /* QUIZ_J carries its own Chinese */
     q.q.zh = ZH.quiz[i].q;
     if (ZH.quiz[i].o && !Array.isArray(q.o)) q.o.zh = ZH.quiz[i].o;
     else if (ZH.quiz[i].o) q.o = { en: q.o, ms: q.o, zh: ZH.quiz[i].o };

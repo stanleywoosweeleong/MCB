@@ -12,7 +12,7 @@ industry figures come from [koko.gov.my](https://www.koko.gov.my/); the journal 
 - **Journal library**: 160 papers from the Malaysian Cocoa Journal (Volumes 11 to 18, 2019 to 2026) with search, year and topic filters,
   a reading list, copy-citation, and links from each product to the research behind it. Abstracts work offline; full papers open on mcj.koko.gov.my
 - **Cocoa passport** that fills up as products are opened, plus a "Surprise me" button
-- **Quiz** with six random questions per round, drawn from the booklet
+- **Quiz** with six random questions per round (four from the booklet, two from the journal), with retry and in-place details
 - **Industry in numbers**: production, grindings, planted area, exports and a bean price snapshot
 - **MCB portals and apps**: one-tap links to eight official sites (koko.gov.my, the journal, CROPED, E-Cocoa, germplasm database, CocoaSafe, KOKO Duniaku, ASEAN Cocoa Club) and the AT-IPM CACAO app on Google Play
 - **About the Board** and a tap-to-call **directory** of 14 offices and research centres

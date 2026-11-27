@@ -361,6 +361,53 @@ var QUIZ = [
     q: { en: "In the Board's published series, which year shows Malaysia's highest cocoa bean production (247,000 tonnes)?", ms: "Dalam siri perangkaan LKM, tahun manakah mencatat pengeluaran biji koko tertinggi Malaysia (247,000 tan)?" } }
 ];
 
+/* ───────── Quiz: questions from the Malaysian Cocoa Journal (j = article ID) ─────────
+   Every answer is stated in that paper's abstract in journal.js. */
+var QUIZ_J = [
+  { j: 80, a: 2, o: ["0.1 mg/kg", "0.5 mg/kg", "1 mg/kg", "5 mg/kg"],
+    q: { en: "At what level does Malaysia regulate cadmium in cocoa and cocoa products?", ms: "Pada paras berapakah Malaysia mengawal kadmium dalam koko dan produk koko?", zh: "马来西亚把可可及可可制品中的镉含量限定在多少？" } },
+  { j: 161, a: 2, o: ["21–22°C", "26–27°C", "31–32°C", "41–42°C"],
+    q: { en: "In bean-to-bar production, what final tempering temperature is essential for dark chocolate?", ms: "Dalam penghasilan biji-ke-bar, berapakah suhu pembajaan (tempering) akhir yang penting bagi coklat gelap?", zh: "在“从豆到棒”工艺中，黑巧克力的最终调温温度应是多少？" } },
+  { j: 161, a: 1, o: ["2–3 μm", "20–30 μm", "200–300 μm", "2,000 μm"],
+    q: { en: "What particle size gives dark chocolate its smooth mouthfeel in bean-to-bar production?", ms: "Saiz zarah berapakah yang memberi coklat gelap rasa licin di mulut dalam penghasilan biji-ke-bar?", zh: "在“从豆到棒”工艺中，多大的颗粒尺寸能让黑巧克力口感细滑？" } },
+  { j: 172, a: 1, o: { en: ["Greenhouses", "Bioreactors", "Fermentation boxes", "Drying beds"], ms: ["Rumah hijau", "Bioreaktor", "Kotak fermentasi", "Para pengeringan"], zh: ["温室", "生物反应器", "发酵箱", "晒豆床"] },
+    q: { en: "In lab-grown chocolate made by plant cell culture, where are the cacao cells grown?", ms: "Bagi coklat makmal yang dihasilkan melalui kultur sel tumbuhan, di manakah sel koko dibiakkan?", zh: "以植物细胞培养制作的“实验室巧克力”，可可细胞是在哪里培养的？" } },
+  { j: 171, a: 0, o: { en: ["At planting", "At harvest", "During fermentation", "During pruning"], ms: ["Semasa menanam", "Semasa menuai", "Semasa fermentasi", "Semasa memangkas"], zh: ["种植时", "采收时", "发酵时", "修剪时"] },
+    q: { en: "Reproductive incompatibility between cocoa clones is described as the only major yield constraint that is fixed when?", ms: "Ketidakserasian pembiakan antara klon koko digambarkan sebagai satu-satunya kekangan hasil utama yang ditetapkan pada bila?", zh: "可可品系之间的生殖不亲和，被形容为唯一在何时就已注定的主要产量限制？" } },
+  { j: 121, a: 1, o: ["8", "28", "128", "280"],
+    q: { en: "A review of chocolate 3D printing screened 380 publications. How many met its criteria?", ms: "Satu ulasan tentang pencetakan 3D coklat menyaring 380 penerbitan. Berapa yang memenuhi kriterianya?", zh: "一篇关于巧克力 3D 打印的综述筛选了 380 篇文献，其中有多少篇符合标准？" } },
+  { j: 124, a: 0, o: { en: ["Sacha inchi oil", "Palm oil", "Olive oil", "Coconut oil"], ms: ["Minyak sacha inchi", "Minyak sawit", "Minyak zaitun", "Minyak kelapa"], zh: ["印加果油", "棕榈油", "橄榄油", "椰子油"] },
+    q: { en: "\"Omega dark chocolate\" in an MCB study was enriched with an oleogel of which oil?", ms: "\"Coklat gelap omega\" dalam satu kajian LKM diperkaya dengan oleogel minyak apa?", zh: "可可局一项研究中的“omega 黑巧克力”添加了哪一种油的油凝胶？" } },
+  { j: 108, a: 2, o: ["pH 3–4", "pH 5–6", "pH 7–8", "pH 10–11"],
+    q: { en: "What pH was the cocoa butter liquid soap shampoo expected to have?", ms: "Berapakah pH yang dijangka bagi syampu sabun cecair lemak koko?", zh: "可可脂液体皂洗发水的预期酸碱值（pH）是多少？" } },
+  { j: 52, a: 0, o: { en: ["Pivot Table", "Macro recorder", "Solver", "Mail merge"], ms: ["Jadual Pangsi (Pivot Table)", "Perakam makro", "Solver", "Cantuman mel"], zh: ["数据透视表", "宏录制器", "规划求解", "邮件合并"] },
+    q: { en: "Which Microsoft Excel feature was used to monitor cocoa black pod disease tree by tree?", ms: "Ciri Microsoft Excel manakah yang digunakan untuk memantau penyakit buah hitam koko pokok demi pokok?", zh: "研究人员用 Microsoft Excel 的哪一项功能逐棵监测可可黑荚病？" } },
+  { j: 12, a: 2, o: { en: ["4 years", "14 years", "24 years", "34 years"], ms: ["4 tahun", "14 tahun", "24 tahun", "34 tahun"], zh: ["4 年", "14 年", "24 年", "34 年"] },
+    q: { en: "A study of cocoa pod borer egg-laying was repeated in Tawau to look for climate effects. How far apart were the two studies?", ms: "Kajian peneluran ulat pengorek buah koko diulang di Tawau untuk melihat kesan iklim. Berapakah jarak masa antara dua kajian itu?", zh: "研究人员在斗湖重做了可可荚螟产卵研究，以观察气候的影响。两次研究相隔多久？" } },
+  { j: 180, a: 0, o: { en: ["Its high moisture content", "Its bitter taste", "Its dark colour", "Its strong smell"], ms: ["Kandungan lembapan yang tinggi", "Rasanya yang pahit", "Warnanya yang gelap", "Baunya yang kuat"], zh: ["水分含量高", "味道苦", "颜色深", "气味浓"] },
+    q: { en: "What limits wider use of madu kelulut (stingless-bee honey) in shelf-stable foods?", ms: "Apakah yang mengehadkan penggunaan madu kelulut dalam makanan tahan simpan?", zh: "是什么限制了无刺蜂蜜（madu kelulut）在耐储存食品中的广泛使用？" } },
+  { j: 178, a: 1, o: ["2", "4", "10", "20"],
+    q: { en: "A five-year trial of improved cocoa varieties across four locations identified how many elite clones?", ms: "Ujian lima tahun varieti koko yang diperbaik di empat lokasi mengenal pasti berapa klon elit?", zh: "一项在四个地点进行、历时五年的改良可可品种试验，选出了多少个优良品系？" } },
+  { j: 179, a: 0, o: { en: ["The ginger family", "The mint family", "The citrus family", "The grass family"], ms: ["Keluarga halia", "Keluarga pudina", "Keluarga sitrus", "Keluarga rumput"], zh: ["姜科", "唇形科（薄荷）", "芸香科（柑橘）", "禾本科"] },
+    q: { en: "A botanical biopesticide tested on cocoa pod borer eggs was made from plants of which family?", ms: "Biopestisid botani yang diuji pada telur ulat pengorek buah koko dihasilkan daripada tumbuhan keluarga apa?", zh: "一种用可可荚螟卵做试验的植物源生物农药，取自哪一科的植物？" } },
+  { j: 96, a: 1, o: ["0.7%", "6.7%", "26.7%", "67%"],
+    q: { en: "KokoCorrect was used on 1,367 grafted seedlings from ten Sabah nurseries. What share turned out to be non-commercial or unknown clones?", ms: "KokoCorrect digunakan pada 1,367 anak benih cantuman dari sepuluh tapak semaian di Sabah. Berapa peratus didapati klon bukan komersial atau tidak diketahui?", zh: "研究人员用 KokoCorrect 检测了沙巴十个苗圃的 1,367 株嫁接苗，其中有多少属于非商业或不明品系？" } },
+  { j: 117, a: 2, o: ["10–17%", "30–37%", "50–57%", "80–87%"],
+    q: { en: "About how much of a cocoa seed's weight is cocoa butter?", ms: "Kira-kira berapa peratus berat biji koko terdiri daripada lemak koko?", zh: "可可种子的重量中大约有多少是可可脂？" } },
+  { j: 93, a: 3, o: ["60°C", "70°C", "80°C", "100°C"],
+    q: { en: "Which temperature was chosen for pressing cocoa butter with an oil expresser, after it gave the highest polyphenol content in the nibs?", ms: "Suhu manakah yang dipilih untuk memerah lemak koko dengan pemerah minyak, selepas ia memberi kandungan polifenol tertinggi dalam nib?", zh: "用榨油机压榨可可脂时，哪个温度因让可可碎粒的多酚含量最高而被选用？" } },
+  { j: 10, a: 1, o: { en: ["0.1 kg per tree a year", "1 kg per tree a year", "5 kg per tree a year", "10 kg per tree a year"], ms: ["0.1 kg sepokok setahun", "1 kg sepokok setahun", "5 kg sepokok setahun", "10 kg sepokok setahun"], zh: ["每棵树每年 0.1 公斤", "每棵树每年 1 公斤", "每棵树每年 5 公斤", "每棵树每年 10 公斤"] },
+    q: { en: "In the field trial of the Board's new compound fertilizer, how much was applied?", ms: "Dalam ujian lapangan baja sebatian baharu LKM, berapakah kadar yang digunakan?", zh: "在可可局新型复合肥的田间试验中，施肥量是多少？" } },
+  { j: 142, a: 0, o: { en: ["Almond milk", "Soy milk", "Oat milk", "Coconut milk"], ms: ["Susu badam", "Susu soya", "Susu oat", "Santan"], zh: ["杏仁奶", "豆奶", "燕麦奶", "椰奶"] },
+    q: { en: "The non-dairy version of cocoa butter-based Musang King durian ice cream was made with which milk?", ms: "Versi bukan tenusu aiskrim durian Musang King berasaskan lemak koko dibuat dengan susu apa?", zh: "以可可脂制作的猫山王榴梿冰淇淋，其非乳制版本用的是哪一种奶？" } },
+  { j: 143, a: 0, o: { en: ["Ultrasonic-assisted extraction", "Cold pressing", "Steam distillation", "Freeze drying"], ms: ["Pengekstrakan berbantu ultrasonik", "Perahan sejuk", "Penyulingan stim", "Pengeringan sejuk beku"], zh: ["超声波辅助提取", "冷压", "蒸汽蒸馏", "冷冻干燥"] },
+    q: { en: "Which method uses high-frequency sound waves to recover more pectin from cocoa pod husk?", ms: "Kaedah manakah menggunakan gelombang bunyi frekuensi tinggi untuk mendapatkan lebih banyak pektin daripada kulit buah koko?", zh: "哪一种方法利用高频声波，从可可果壳中提取更多果胶？" } },
+  { j: 147, a: 0, o: { en: ["Maltodextrin", "Gelatin", "Corn starch", "Table salt"], ms: ["Maltodekstrin", "Gelatin", "Kanji jagung", "Garam"], zh: ["麦芽糊精", "明胶", "玉米淀粉", "食盐"] },
+    q: { en: "What drying aid was added to cocoa pulp juice before spray drying?", ms: "Apakah bahan bantu pengeringan yang ditambah pada jus pulpa koko sebelum pengeringan sembur?", zh: "可可果肉汁在喷雾干燥前加入了哪一种助干剂？" } },
+  { j: 123, a: 3, o: { en: ["Harvesting", "Fermentation", "Drying", "Conching"], ms: ["Penuaian", "Fermentasi", "Pengeringan", "Conching"], zh: ["采收", "发酵", "干燥", "精炼（conching）"] },
+    q: { en: "Which of these is NOT one of the primary processing steps that turn fresh cocoa beans into dried beans?", ms: "Yang manakah BUKAN langkah pemprosesan primer yang menukar biji koko segar kepada biji kering?", zh: "把新鲜可可豆变成干豆的初加工步骤，不包括下列哪一项？" } }
+];
+
 /* ───────── Industry (koko.gov.my › Perangkaan) ───────── */
 var STATS = {
   read: "2026-11-27",

@@ -324,3 +324,6 @@ blockquote small{display:block;margin-top:8px;color:var(--muted);font-size:.8rem
 .qpanel .desc{margin-top:14px;font-size:.96rem}
 .qpanel .pts{margin-top:12px}
 .qpanel .pts li{background:var(--bg)}
+.qpaper .pill{color:var(--accent)}
+.qpaper .actions{margin:14px 0 6px}
+.qpaper .actions .btn{min-height:42px;padding:0 14px;font-size:.88rem}

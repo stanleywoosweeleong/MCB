@@ -29,13 +29,13 @@ var T = {
     passport: "Cocoa passport", passportSub: "{n} of {t} products discovered", rank: ["Seedling", "Pod picker", "Fermenter", "Chocolatier"],
     cats: "Three collections", items: "{n} products", needs: "What are you looking for?",
     statLead: "more cocoa ground than grown", statText: "In 2025 Malaysia ground 294,697 tonnes of cocoa beans but harvested 268 tonnes.", statMore: "See the industry in numbers",
-    quizTitle: "How well do you know your cocoa?", quizText: "Six quick questions drawn from the booklet.", quizGo: "Play the quiz", best: "Best score: {n}/{t}",
+    quizTitle: "How well do you know your cocoa?", quizText: "Six quick questions from the booklet and the journal.", quizGo: "Play the quiz", best: "Best score: {n}/{t}",
     short: { A: "Farming", B: "Care", C: "Food" }, today: "Pick of the day", newest: "Not yet discovered", all: "All", seeAll: "See all",
     search: "Search products", saved: "Saved", count: "{n} products", none: "Nothing matches. Try a different word or clear the filters.", clear: "Clear filters",
     back: "Back", save: "Save", unsave: "Saved", share: "Share", page: "Booklet p. {n}", highlights: "Highlights", about: "About",
     health: "Benefits are as described in the Malaysian Cocoa Board's booklet. This is general information, not medical advice.",
     visit: "Open the portal", getApp: "Get it on Google Play", close: "Close", rightAns: "Correct answer: {a}", confirmReset: "Clear your discovered products and quiz score?", citeFail: "Could not copy. Select the text instead.", saveFor: "Save: {t}", readPaper: "Read the paper (ResearchGate)", related: "You may also like", prev: "Previous", next: "Next", copied: "Link copied", savedMsg: "Saved", removedMsg: "Removed",
-    qStart: "Start", qNext: "Next question", qFinish: "See my score", qRight: "Correct!", qWrong: "Not quite.", qSee: "About this product", qHide: "Hide product", qBack: "Back to the question", qTry: "Not quite. Try another answer.", qShow: "Show the answer", qShown: "Here is the answer.", qRightRetry: "Correct this time!", qFirst: "Only a first-try answer scores, but keep going to learn the right one.",
+    qStart: "Start", qNext: "Next question", qFinish: "See my score", qRight: "Correct!", qWrong: "Not quite.", qSee: "About this product", qSeeJ: "About this paper", qHideJ: "Hide paper", qHide: "Hide product", qBack: "Back to the question", qTry: "Not quite. Try another answer.", qShow: "Show the answer", qShown: "Here is the answer.", qRightRetry: "Correct this time!", qFirst: "Only a first-try answer scores, but keep going to learn the right one.",
     qDone: ["Keep exploring, the answers are all in the products.", "Good going. A few more products and you'll ace it.", "Excellent. You know your cocoa.", "Perfect score. A true chocolatier!"],
     qAgain: "Play again", qOf: "Question {n} of {t}", yourScore: "Your score",
     indTitle: "Cocoa in numbers", indLead: "Malaysia grows very little cocoa today, yet it remains one of the world's cocoa processing hubs.",
@@ -73,13 +73,13 @@ var T = {
     passport: "Pasport koko", passportSub: "{n} daripada {t} produk ditemui", rank: ["Anak benih", "Pemetik buah", "Pemeram", "Chocolatier"],
     cats: "Tiga koleksi", items: "{n} produk", needs: "Apa yang anda cari?",
     statLead: "lebih banyak koko dikisar daripada ditanam", statText: "Pada 2025 Malaysia mengisar 294,697 tan biji koko tetapi hanya menuai 268 tan.", statMore: "Lihat industri dalam angka",
-    quizTitle: "Sejauh mana anda kenal koko?", quizText: "Enam soalan ringkas daripada buku kecil LKM.", quizGo: "Main kuiz", best: "Markah terbaik: {n}/{t}",
+    quizTitle: "Sejauh mana anda kenal koko?", quizText: "Enam soalan ringkas daripada buku kecil dan jurnal LKM.", quizGo: "Main kuiz", best: "Markah terbaik: {n}/{t}",
     short: { A: "Ladang", B: "Jagaan", C: "Makanan" }, today: "Pilihan hari ini", newest: "Belum ditemui", all: "Semua", seeAll: "Lihat semua",
     search: "Cari produk", saved: "Disimpan", count: "{n} produk", none: "Tiada padanan. Cuba perkataan lain atau kosongkan tapisan.", clear: "Kosongkan tapisan",
     back: "Kembali", save: "Simpan", unsave: "Disimpan", share: "Kongsi", page: "Buku kecil ms. {n}", highlights: "Ciri utama", about: "Perihal",
     health: "Manfaat adalah seperti yang dinyatakan dalam buku kecil Lembaga Koko Malaysia. Ini maklumat umum, bukan nasihat perubatan.",
     visit: "Buka portal", getApp: "Dapatkan di Google Play", close: "Tutup", rightAns: "Jawapan betul: {a}", confirmReset: "Kosongkan produk ditemui dan markah kuiz anda?", citeFail: "Tidak dapat menyalin. Pilih teks secara manual.", saveFor: "Simpan: {t}", readPaper: "Baca kertas kajian (ResearchGate)", related: "Anda mungkin juga suka", prev: "Sebelum", next: "Seterusnya", copied: "Pautan disalin", savedMsg: "Disimpan", removedMsg: "Dibuang",
-    qStart: "Mula", qNext: "Soalan seterusnya", qFinish: "Lihat markah saya", qRight: "Betul!", qWrong: "Kurang tepat.", qSee: "Perihal produk ini", qHide: "Sembunyikan produk", qBack: "Kembali ke soalan", qTry: "Kurang tepat. Cuba jawapan lain.", qShow: "Tunjukkan jawapan", qShown: "Inilah jawapannya.", qRightRetry: "Betul kali ini!", qFirst: "Hanya jawapan cubaan pertama dikira markah, tetapi teruskan untuk mengetahui jawapan yang betul.",
+    qStart: "Mula", qNext: "Soalan seterusnya", qFinish: "Lihat markah saya", qRight: "Betul!", qWrong: "Kurang tepat.", qSee: "Perihal produk ini", qSeeJ: "Perihal kertas ini", qHideJ: "Sembunyikan kertas", qHide: "Sembunyikan produk", qBack: "Kembali ke soalan", qTry: "Kurang tepat. Cuba jawapan lain.", qShow: "Tunjukkan jawapan", qShown: "Inilah jawapannya.", qRightRetry: "Betul kali ini!", qFirst: "Hanya jawapan cubaan pertama dikira markah, tetapi teruskan untuk mengetahui jawapan yang betul.",
     qDone: ["Teruskan meneroka, semua jawapan ada dalam produk.", "Bagus. Teroka beberapa produk lagi untuk markah penuh.", "Cemerlang. Anda memang kenal koko.", "Markah penuh. Chocolatier sejati!"],
     qAgain: "Main lagi", qOf: "Soalan {n} daripada {t}", yourScore: "Markah anda",
     indTitle: "Koko dalam angka", indLead: "Malaysia kini menanam sedikit sahaja koko, namun kekal antara hab pemprosesan koko dunia.",
@@ -396,6 +396,11 @@ function vDetail(id) {
 
 /* ── quiz ── */
 var QUIZ_LEN = 6, qz = null;
+function quizRound() {   /* four booklet questions and two journal ones, mixed */
+  var jq = (typeof QUIZ_J !== "undefined" ? QUIZ_J : []).filter(function (q) { return artById[q.j]; });
+  var nj = Math.min(2, jq.length);
+  return shuffle(shuffle(QUIZ).slice(0, QUIZ_LEN - nj).concat(shuffle(jq).slice(0, nj)));
+}
 function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var x = a[i]; a[i] = a[j]; a[j] = x; } return a; }
 function vQuiz() {
   if (!qz) {
@@ -421,10 +426,21 @@ function vQuiz() {
       (msg ? '<b style="color:var(--' + (qz.solved ? "good" : qz.shown ? "muted" : "bad") + ')">' + msg + "</b>" : "<span></span>") +
       '<span class="qbtns">' +
       (!done && wrong ? '<button class="btn soft" type="button" data-qshow>' + t("qShow") + "</button>" : "") +
-      (done && q.p ? '<button class="btn soft" type="button" data-qpanel aria-expanded="' + qz.open + '" aria-controls="qpanel">' + t(qz.open ? "qHide" : "qSee") + "</button>" : "") +
+      (done && (q.p || q.j) ? '<button class="btn soft" type="button" data-qpanel aria-expanded="' + qz.open + '" aria-controls="qpanel">' + t(q.j ? (qz.open ? "qHideJ" : "qSeeJ") : (qz.open ? "qHide" : "qSee")) + "</button>" : "") +
       (done ? '<button class="btn" type="button" data-qnext>' + t(qz.i === QUIZ_LEN - 1 ? "qFinish" : "qNext") + "</button>" : "") + "</span></div>" +
       (wrong && !done ? '<p class="qhint">' + t("qFirst") + "</p>" : "") +
-      (done && q.p && qz.open ? qPanel(byId[q.p]) : "") + "</div>";
+      (done && qz.open ? (q.j ? qPaper(artById[q.j]) : q.p ? qPanel(byId[q.p]) : "") : "") + "</div>";
+}
+/* the journal paper behind a question, opened in place */
+function qPaper(x) {
+  var on = reads.indexOf(x.id) >= 0;
+  return '<section class="card qpanel qpaper" id="qpanel" tabindex="-1" aria-label="' + esc(x.t) + '">' +
+    '<button class="qx" type="button" data-qpanel aria-label="' + esc(t("close")) + '">✕</button>' +
+    '<div class="qphead"><div><span class="pill">Malaysian Cocoa Journal · ' + volLabel(x) + "</span><h2>" + esc(x.t) + "</h2><p>" + esc(x.a) + "</p></div></div>" +
+    (x.ab ? '<p class="desc">' + esc(x.ab) + "</p>" : "") +
+    '<div class="actions"><a class="btn soft" href="https://mcj.koko.gov.my/ViewPDF.aspx?ID=' + x.id + '" target="_blank" rel="noopener">' + I.link + t("readPdf") + "</a>" +
+    '<button class="btn soft" type="button" data-read="' + x.id + '" aria-pressed="' + on + '">' + I.mark + t("jSaved") + "</button></div>" +
+    '<p style="text-align:center;margin-top:6px"><button class="btn soft" type="button" data-qpanel>' + t("qBack") + "</button></p></section>";
 }
 /* the product behind a question, opened in place so the quiz is not left */
 function qPanel(p) {
@@ -678,7 +694,7 @@ document.addEventListener("click", function (e) {
   if ("tagf" in d) { filt.tag = filt.tag === d.tagf ? "" : d.tagf; refreshGrid(true); return; }
   if ("saved" in d) { filt.saved = !filt.saved; refreshGrid(true); return; }
   if ("clear" in d) { filt = { cat: "", tag: "", q: "", saved: false }; render(); return; }
-  if ("qstart" in d) { qz = { qs: shuffle(QUIZ).slice(0, QUIZ_LEN), i: 0, res: [], tried: [], solved: false, shown: false, open: false }; render(); return; }
+  if ("qstart" in d) { qz = { qs: quizRound(), i: 0, res: [], tried: [], solved: false, shown: false, open: false }; render(); return; }
   if ("opt" in d) {
     var qq = qz.qs[qz.i], qo = Array.isArray(qq.o) ? qq.o : L(qq.o), pick = +d.opt;
     if (qz.solved || qz.shown || qz.tried.indexOf(pick) >= 0) return;
