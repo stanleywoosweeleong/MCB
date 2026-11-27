@@ -62,6 +62,7 @@ var T = {
     jProducts: "From lab to market", jProductsS: "MCB products connected to this research", research: "Research behind this", researchS: "Papers from the Malaysian Cocoa Journal on related work",
     latest: "Latest research", jNote: "Abstracts and papers are the copyright of the Malaysian Cocoa Journal and their authors. Full papers need an internet connection.", jEnOnly: "",
     topics: { pest: "Pests & diseases", breed: "Breeding & genetics", agro: "Soil & agronomy", proc: "Processing & chocolate", health: "Health & personal care", safety: "Safety & analysis", waste: "By-products", econ: "Economics & extension" },
+    mPortals: "MCB web portals", mPortalsS: "{n} official sites, one tap away", portalsLead: "Official Malaysian Cocoa Board sites. Each opens in your browser and needs an internet connection.", open: "Open", seeProduct: "About this in KokoLab", portalsHome: "Go to the source",
     mInd: "Cocoa in numbers", mIndS: "Production, grindings, exports and prices", mReads: "Reading list", mReadsS: "{n} papers saved",
     version: "This copy: {d}", newVer: "A new version is ready", refresh: "Refresh"
   },
@@ -106,6 +107,7 @@ var T = {
     jProducts: "Dari makmal ke pasaran", jProductsS: "Produk LKM yang berkaitan dengan penyelidikan ini", research: "Penyelidikan di sebaliknya", researchS: "Kertas daripada Malaysian Cocoa Journal tentang kerja berkaitan",
     latest: "Penyelidikan terkini", jNote: "Abstrak dan kertas ialah hak cipta Malaysian Cocoa Journal dan penulisnya. Kertas penuh memerlukan sambungan internet.", jEnOnly: "Jurnal ini diterbitkan dalam Bahasa Inggeris.",
     topics: { pest: "Perosak & penyakit", breed: "Pembiakbakaan & genetik", agro: "Tanah & agronomi", proc: "Pemprosesan & coklat", health: "Kesihatan & penjagaan diri", safety: "Keselamatan & analisis", waste: "Hasil sampingan", econ: "Ekonomi & pengembangan" },
+    mPortals: "Portal web LKM", mPortalsS: "{n} laman rasmi, satu tekan sahaja", portalsLead: "Laman rasmi Lembaga Koko Malaysia. Setiap satu dibuka dalam pelayar anda dan memerlukan sambungan internet.", open: "Buka", seeProduct: "Perihal ini dalam KokoLab", portalsHome: "Terus ke sumber",
     mInd: "Koko dalam angka", mIndS: "Pengeluaran, pengisaran, eksport dan harga", mReads: "Senarai bacaan", mReadsS: "{n} kertas disimpan",
     version: "Salinan ini: {d}", newVer: "Versi baharu sudah sedia", refresh: "Muat semula"
   }
@@ -195,7 +197,7 @@ function vJournal() {
   var first = ART[ART.length - 1], last = ART[0];
   return '<div class="page"><h1>' + t("jTitle") + '</h1><p class="lead">' + t("jLead", { n: ART.length, v0: first.v, y0: first.y, v1: last.v, y1: last.y }) + (t("jEnOnly") ? " " + t("jEnOnly") : "") + "</p></div>" +
     '<div class="filters" style="margin-top:14px"><label class="search">' + I.search + '<input id="jq" type="search" autocomplete="off" enterkeyhint="search" placeholder="' + esc(t("jSearch")) + '" aria-label="' + esc(t("jSearch")) + '" value="' + esc(jf.q) + '"></label>' +
-    '<div class="rowscroll" id="jyears">' + jYearsHtml() + '</div><div class="rowscroll" id="jchips">' + jChipsHtml() + '</div></div><div id="jlist">' + jListHtml() + '</div><p class="note sect">' + t("jNote") + "</p>";
+    '<div class="rowscroll" id="jyears">' + jYearsHtml() + '</div><div class="rowscroll" id="jchips">' + jChipsHtml() + '</div></div><div id="jlist">' + jListHtml() + '</div><p class="note sect">' + t("jNote") + '</p><p style="margin-top:14px"><a class="btn soft" href="https://mcj.koko.gov.my/" target="_blank" rel="noopener">' + I.link + "mcj.koko.gov.my</a></p>";
 }
 function jRefresh() { $("#jlist").innerHTML = jListHtml(); $("#jyears").innerHTML = jYearsHtml(); $("#jchips").innerHTML = jChipsHtml(); }
 function citation(x) { return x.a + " (" + x.y + "). " + x.t + ". Malaysian Cocoa Journal, " + x.v + (x.i ? "(" + x.i + ")" : "") + ". https://mcj.koko.gov.my/ArticleDetail.aspx?ID=" + x.id; }
@@ -304,6 +306,10 @@ function vHome() {
     (ART.length ? '<section class="sect"><div class="secthead"><h2>' + t("latest") + '</h2><a class="more" href="#/journal" data-jreset>' + t("jCount", { n: ART.length }) + ' →</a></div><div class="list">' + ART.slice(0, 3).map(arow).join("") + "</div></section>" : "") +
 
     '<section class="sect"><a class="card stat" href="#/industry"><div class="num">1,100×</div><p><b>' + t("statLead") + "</b></p><p>" + t("statText") + "</p><small>" + t("statMore") + " →</small></a></section>" +
+
+    '<section class="sect"><div class="secthead"><h2>' + t("portalsHome") + '</h2><a class="more" href="#/portals">' + t("seeAll") + '</a></div><div class="needs">' + PORTALS.map(function (o) {
+      return '<a class="chip" href="' + o.u + '" target="_blank" rel="noopener">' + esc(o.n) + " ↗</a>";
+    }).join("") + "</div></section>" +
 
     '<section class="sect"><div class="secthead"><h2>' + t("newest") + '</h2><a class="more" href="#/products" data-reset>' + t("seeAll") + '</a></div><div class="hscroll">' + fresh.map(card).join("") + "</div></section>" +
     footer();
@@ -475,11 +481,19 @@ function vMore() {
     item(I.industry, t("mInd"), t("mIndS"), 'href="#/industry"') +
     item(I.info, t("mAbout"), t("mAboutS"), 'href="#/about"') +
     item(I.pin, t("mDir"), t("mDirS", { n: OFFICES.length }), 'href="#/directory"') +
-    item(I.link, t("mSite"), t("mSiteS"), 'href="https://www.koko.gov.my/" target="_blank" rel="noopener"') +
-    item(I.globe, t("mLang"), t("mLangS"), 'type="button" data-langpick', "button") +
+    item(I.globe, t("mPortals"), t("mPortalsS", { n: PORTALS.length }), 'href="#/portals"') +
+    item(I.info, t("mLang"), t("mLangS"), 'type="button" data-langpick', "button") +
     (deferredInstall ? item(I.down, t("mInstall"), t("mInstallS"), 'type="button" data-install', "button") : "") +
     item(I.reset, t("mReset"), t("mResetS"), 'type="button" data-resetpass', "button") +
     "</div>" + footer() + "</div>";
+}
+function host(u) { return u.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, ""); }
+function vPortals() {
+  return '<a class="back" href="#/more">← ' + t("more") + '</a><div class="page"><h1>' + t("mPortals") + '</h1><p class="lead">' + t("portalsLead") + '</p><div class="list sect">' + PORTALS.map(function (o) {
+    return '<div class="card office"><span class="pill" style="color:var(--accent)">' + host(o.u) + "</span><h3>" + esc(o.n) + "</h3><p>" + esc(L(o)) + '</p><div class="row">' +
+      '<a class="btn" href="' + o.u + '" target="_blank" rel="noopener">' + I.link + t("open") + "</a>" +
+      (o.p ? '<a class="btn soft" href="#/p/' + o.p + '">' + t("seeProduct") + "</a>" : "") + "</div></div>";
+  }).join("") + "</div></div>";
 }
 function vAbout() {
   var q = function (k) {
@@ -488,7 +502,7 @@ function vAbout() {
   return '<a class="back" href="#/more">← ' + t("more") + '</a><div class="page"><h1>' + t("aboutTitle") + '</h1><p class="lead">' + t("aboutLead") + "</p>" + q("vision") + q("mission") +
     '<section class="sect"><h2>' + t("functions") + '</h2><ul class="pts cat-A">' + ABOUT.functions[LANG].map(function (f) { return "<li>" + esc(f) + "</li>"; }).join("") + "</ul></section>" +
     '<section class="sect"><h2>' + t("history") + '</h2><ol class="tl">' + ABOUT.timeline.map(function (e) { return "<li><b>" + e.y + "</b><span>" + esc(L(e)) + "</span></li>"; }).join("") + "</ol></section>" +
-    '<p class="sect"><a class="btn" href="#/directory">' + t("mDir") + "</a></p></div>";
+    '<p class="sect" style="display:flex;flex-wrap:wrap;gap:10px"><a class="btn" href="#/directory">' + t("mDir") + '</a><a class="btn soft" href="#/portals">' + t("mPortals") + "</a></p></div>";
 }
 function vDirectory() {
   var cls = { hq: "cat-C", rd: "cat-A", unit: "cat-B" };
@@ -511,6 +525,7 @@ function render(keepScroll) {
   else if (r === "journal") html = vJournal();
   else if (r === "industry") { html = vIndustry(); tab = "more"; }
   else if (r === "more") html = vMore();
+  else if (r === "portals") { html = vPortals(); tab = "more"; }
   else if (r === "about") { html = vAbout(); tab = "more"; }
   else if (r === "directory") { html = vDirectory(); tab = "more"; }
   else { html = vHome(); tab = ""; }

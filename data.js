@@ -419,3 +419,15 @@ var OFFICES = [
   { t: "unit", n: "Pejabat Unit Sarikei", a: "c/o Agriculture Development Centre, Sungai Paoh, 96100 Sarikei, Sarawak", s: "Sarawak", tel: ["084-671075"] },
   { t: "unit", n: "Pejabat Makmal Fasilitasi Hab Perdagangan Koko", a: "Unit 4.4 & 4.5, Blok B, Wisma PTP, Pelabuhan Tanjung Pelepas, Johor", s: "Johor", tel: ["07-5095274"] }
 ];
+
+/* ───────── MCB web portals (addresses checked 27 Nov 2026) ───────── */
+var PORTALS = [
+  { n: "Lembaga Koko Malaysia", u: "https://www.koko.gov.my/", en: "The Board's official website: news, services, licensing, statistics and daily bean prices.", ms: "Laman web rasmi LKM: berita, perkhidmatan, pelesenan, perangkaan dan harga biji koko harian." },
+  { n: "Malaysian Cocoa Journal", u: "https://mcj.koko.gov.my/", en: "The Board's research journal: current issue, archive, author guidelines and submission.", ms: "Jurnal penyelidikan LKM: isu semasa, arkib, panduan penulis dan penghantaran." },
+  { n: "CROPED", u: "https://croped.koko.my/", p: "croped", en: "Cocoa pests and diseases portal: scientific names, damage symptoms and control measures.", ms: "Portal perosak dan penyakit koko: nama saintifik, simptom kerosakan dan langkah kawalan." },
+  { n: "E-Cocoa", u: "https://ecocoa.koko.gov.my/", en: "Portal for smallholders: planting and productivity programmes, cocoa planting and bean quality guides, list of licensees.", ms: "Portal untuk pekebun kecil: program tanaman dan produktiviti, panduan tanaman koko dan kualiti biji koko, senarai pelesen." },
+  { n: "Cocoa Germplasm Database", u: "https://germplasm.koko.my/", en: "Phenotypic and genotypic data on cocoa germplasm evaluated at the Board's research centres.", ms: "Data fenotip dan genotip germplasma koko yang dinilai di pusat penyelidikan LKM." },
+  { n: "CocoaSafe", u: "https://cocoasafe.koko.gov.my/", en: "Producing and trading cocoa that meets food safety and international SPS standards.", ms: "Pengeluaran dan perdagangan koko yang memenuhi piawaian keselamatan makanan dan SPS antarabangsa." },
+  { n: "KOKO Duniaku", u: "https://portalduniaku.koko.my/", en: "For the public (in Malay): the story of cocoa, how chocolate is made, recipes, nutrition and a cocoa club.", ms: "Untuk orang ramai: asal usul koko, pembuatan coklat, resipi, khasiat dan kelab koko." },
+  { n: "ASEAN Cocoa Club", u: "https://acc.koko.gov.my/", en: "Website of the ASEAN Cocoa Club (ACC).", ms: "Laman web ASEAN Cocoa Club (ACC)." }
+];

@@ -14,6 +14,7 @@ industry figures come from [koko.gov.my](https://www.koko.gov.my/); the journal 
 - **Cocoa passport** that fills up as products are opened, plus a "Surprise me" button
 - **Quiz** with six random questions per round, drawn from the booklet
 - **Industry in numbers**: production, grindings, planted area, exports and a bean price snapshot
+- **MCB web portals**: one-tap links to eight official sites (koko.gov.my, the journal, CROPED, E-Cocoa, germplasm database, CocoaSafe, KOKO Duniaku, ASEAN Cocoa Club)
 - **About the Board** and a tap-to-call **directory** of 14 offices and research centres
 - **English and Bahasa Melayu**, chosen on first launch and remembered
 - Works offline, follows the phone's light or dark theme, and updates itself
