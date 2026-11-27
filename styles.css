@@ -310,3 +310,17 @@ blockquote small{display:block;margin-top:8px;color:var(--muted);font-size:.8rem
 .nb{white-space:nowrap}
 :lang(zh) .hero h1{max-width:none}
 :lang(zh) .hero p{max-width:17em}
+
+/* ── quiz: retry and the in-place product panel ── */
+.qbtns{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto}
+.qhint{font-size:.84rem;color:var(--muted);margin-top:10px}
+.opts button.no{opacity:.75}
+.qpanel{position:relative;margin-top:18px;padding:18px 16px 16px;animation:rise .28s ease both;outline:0}
+.qpanel .qx{position:absolute;top:8px;right:8px;width:42px;height:42px;border-radius:50%;border:0;background:var(--sunk);font-size:1rem}
+.qphead{display:flex;gap:14px;align-items:center;padding-right:44px}
+.qphead img{width:92px;height:92px;flex:none;object-fit:cover;object-position:50% 35%;border-radius:14px;background:var(--sunk)}
+.qphead h2{font-family:inherit;text-transform:none;letter-spacing:0;font-weight:800;font-size:1.15rem;line-height:1.25;margin:4px 0 2px}
+.qphead p{font-size:.88rem;color:var(--muted);line-height:1.35}
+.qpanel .desc{margin-top:14px;font-size:.96rem}
+.qpanel .pts{margin-top:12px}
+.qpanel .pts li{background:var(--bg)}

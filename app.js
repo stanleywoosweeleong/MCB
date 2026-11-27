@@ -35,7 +35,7 @@ var T = {
     back: "Back", save: "Save", unsave: "Saved", share: "Share", page: "Booklet p. {n}", highlights: "Highlights", about: "About",
     health: "Benefits are as described in the Malaysian Cocoa Board's booklet. This is general information, not medical advice.",
     visit: "Open the portal", getApp: "Get it on Google Play", close: "Close", rightAns: "Correct answer: {a}", confirmReset: "Clear your discovered products and quiz score?", citeFail: "Could not copy. Select the text instead.", saveFor: "Save: {t}", readPaper: "Read the paper (ResearchGate)", related: "You may also like", prev: "Previous", next: "Next", copied: "Link copied", savedMsg: "Saved", removedMsg: "Removed",
-    qStart: "Start", qNext: "Next question", qFinish: "See my score", qRight: "Correct!", qWrong: "Not quite.", qSee: "See the product",
+    qStart: "Start", qNext: "Next question", qFinish: "See my score", qRight: "Correct!", qWrong: "Not quite.", qSee: "About this product", qHide: "Hide product", qBack: "Back to the question", qTry: "Not quite. Try another answer.", qShow: "Show the answer", qShown: "Here is the answer.", qRightRetry: "Correct this time!", qFirst: "Only a first-try answer scores, but keep going to learn the right one.",
     qDone: ["Keep exploring, the answers are all in the products.", "Good going. A few more products and you'll ace it.", "Excellent. You know your cocoa.", "Perfect score. A true chocolatier!"],
     qAgain: "Play again", qOf: "Question {n} of {t}", yourScore: "Your score",
     indTitle: "Cocoa in numbers", indLead: "Malaysia grows very little cocoa today, yet it remains one of the world's cocoa processing hubs.",
@@ -79,7 +79,7 @@ var T = {
     back: "Kembali", save: "Simpan", unsave: "Disimpan", share: "Kongsi", page: "Buku kecil ms. {n}", highlights: "Ciri utama", about: "Perihal",
     health: "Manfaat adalah seperti yang dinyatakan dalam buku kecil Lembaga Koko Malaysia. Ini maklumat umum, bukan nasihat perubatan.",
     visit: "Buka portal", getApp: "Dapatkan di Google Play", close: "Tutup", rightAns: "Jawapan betul: {a}", confirmReset: "Kosongkan produk ditemui dan markah kuiz anda?", citeFail: "Tidak dapat menyalin. Pilih teks secara manual.", saveFor: "Simpan: {t}", readPaper: "Baca kertas kajian (ResearchGate)", related: "Anda mungkin juga suka", prev: "Sebelum", next: "Seterusnya", copied: "Pautan disalin", savedMsg: "Disimpan", removedMsg: "Dibuang",
-    qStart: "Mula", qNext: "Soalan seterusnya", qFinish: "Lihat markah saya", qRight: "Betul!", qWrong: "Kurang tepat.", qSee: "Lihat produk",
+    qStart: "Mula", qNext: "Soalan seterusnya", qFinish: "Lihat markah saya", qRight: "Betul!", qWrong: "Kurang tepat.", qSee: "Perihal produk ini", qHide: "Sembunyikan produk", qBack: "Kembali ke soalan", qTry: "Kurang tepat. Cuba jawapan lain.", qShow: "Tunjukkan jawapan", qShown: "Inilah jawapannya.", qRightRetry: "Betul kali ini!", qFirst: "Hanya jawapan cubaan pertama dikira markah, tetapi teruskan untuk mengetahui jawapan yang betul.",
     qDone: ["Teruskan meneroka, semua jawapan ada dalam produk.", "Bagus. Teroka beberapa produk lagi untuk markah penuh.", "Cemerlang. Anda memang kenal koko.", "Markah penuh. Chocolatier sejati!"],
     qAgain: "Main lagi", qOf: "Soalan {n} daripada {t}", yourScore: "Markah anda",
     indTitle: "Koko dalam angka", indLead: "Malaysia kini menanam sedikit sahaja koko, namun kekal antara hab pemprosesan koko dunia.",
@@ -409,16 +409,32 @@ function vQuiz() {
       '<div class="dots" style="width:100%">' + qz.res.map(function (r) { return '<i class="' + (r ? "ok" : "no") + '"></i>'; }).join("") + "</div>" +
       '<button class="btn" type="button" data-qstart>' + t("qAgain") + '</button><a class="btn soft" href="#/products" data-reset>' + t("explore") + "</a></div></div>";
   }
-  var q = qz.qs[qz.i], opts = Array.isArray(q.o) ? q.o : L(q.o), done = qz.picked !== null;
+  var q = qz.qs[qz.i], opts = Array.isArray(q.o) ? q.o : L(q.o), done = qz.solved || qz.shown, wrong = qz.tried.length > 0;
+  var msg = qz.solved ? (wrong ? t("qRightRetry") : t("qRight")) : qz.shown ? t("qShown") : wrong ? t("qTry") : "";
   return '<div class="quiz"><p class="eyebrow">' + t("qOf", { n: qz.i + 1, t: QUIZ_LEN }) + '</p><div class="dots">' + qz.qs.map(function (_, k) {
       return '<i class="' + (k < qz.res.length ? (qz.res[k] ? "ok" : "no") : k === qz.i ? "now" : "") + '"></i>';
     }).join("") + '</div><p class="qtext">' + esc(L(q.q)) + '</p><div class="opts">' + opts.map(function (o, k) {
-      var cls = done ? (k === q.a ? "ok" : k === qz.picked ? "no" : "") : "";
-      return '<button type="button" data-opt="' + k + '" class="' + cls + '"' + (done ? " disabled" : "") + "><span>" + "ABCD"[k] + "</span>" + esc(o) + (done && k === q.a ? '<span class="sr"> ✓</span>' : "") + "</button>";
-    }).join("") + '</div><div class="qfoot" aria-live="polite">' + (done ?
-      "<b style=\"color:var(--" + (qz.picked === q.a ? "good" : "bad") + ')">' + t(qz.picked === q.a ? "qRight" : "qWrong") + "</b>" +
-      '<span style="display:flex;gap:8px;flex-wrap:wrap">' + (q.p ? '<a class="btn soft" href="#/p/' + q.p + '">' + t("qSee") + "</a>" : "") +
-      '<button class="btn" type="button" data-qnext>' + t(qz.i === QUIZ_LEN - 1 ? "qFinish" : "qNext") + "</button></span>" : "") + "</div></div>";
+      var miss = qz.tried.indexOf(k) >= 0, cls = done && k === q.a ? "ok" : miss ? "no" : "";
+      return '<button type="button" data-opt="' + k + '" class="' + cls + '"' + (done || miss ? " disabled" : "") + "><span>" + "ABCD"[k] + "</span>" + esc(o) +
+        (done && k === q.a ? '<span class="sr"> ✓</span>' : miss ? '<span class="sr"> ✗</span>' : "") + "</button>";
+    }).join("") + '</div><div class="qfoot">' +
+      (msg ? '<b style="color:var(--' + (qz.solved ? "good" : qz.shown ? "muted" : "bad") + ')">' + msg + "</b>" : "<span></span>") +
+      '<span class="qbtns">' +
+      (!done && wrong ? '<button class="btn soft" type="button" data-qshow>' + t("qShow") + "</button>" : "") +
+      (done && q.p ? '<button class="btn soft" type="button" data-qpanel aria-expanded="' + qz.open + '" aria-controls="qpanel">' + t(qz.open ? "qHide" : "qSee") + "</button>" : "") +
+      (done ? '<button class="btn" type="button" data-qnext>' + t(qz.i === QUIZ_LEN - 1 ? "qFinish" : "qNext") + "</button>" : "") + "</span></div>" +
+      (wrong && !done ? '<p class="qhint">' + t("qFirst") + "</p>" : "") +
+      (done && q.p && qz.open ? qPanel(byId[q.p]) : "") + "</div>";
+}
+/* the product behind a question, opened in place so the quiz is not left */
+function qPanel(p) {
+  var pts = p.pts[LANG] || p.pts.en;
+  return '<section class="card qpanel cat-' + p.cat + '" id="qpanel" tabindex="-1" aria-label="' + esc(p.name) + '">' +
+    '<button class="qx" type="button" data-qpanel aria-label="' + esc(t("close")) + '">✕</button>' +
+    '<div class="qphead">' + (p.img ? '<img src="./img/' + p.img + '.webp" alt="">' : "") + '<div><span class="pill">' + esc(L(CATS[p.cat])) + "</span><h2>" + esc(p.name) + "</h2><p>" + esc(L(p.sub)) + "</p></div></div>" +
+    (p.desc ? '<p class="desc">' + esc(L(p.desc)) + "</p>" : "") +
+    (pts.length ? '<ul class="pts">' + pts.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>" : "") +
+    '<p style="text-align:center;margin-top:16px"><button class="btn soft" type="button" data-qpanel>' + t("qBack") + "</button></p></section>";
 }
 
 /* ── industry ── */
@@ -616,7 +632,7 @@ $("#tabs").addEventListener("click", function (e) {
 });
 
 document.addEventListener("click", function (e) {
-  var el = e.target.closest("[data-fav],[data-cat],[data-tag],[data-reset],[data-surprise],[data-catf],[data-tagf],[data-saved],[data-clear],[data-qstart],[data-opt],[data-qnext],[data-langpick],[data-install],[data-resetpass],[data-savedlink],[data-read],[data-jy],[data-jtp],[data-jsaved],[data-jclear],[data-jmore],[data-jkw],[data-jreset],[data-readslink],#dfav,#dshare,#aread,#acite,#ashare");
+  var el = e.target.closest("[data-fav],[data-cat],[data-tag],[data-reset],[data-surprise],[data-catf],[data-tagf],[data-saved],[data-clear],[data-qstart],[data-opt],[data-qnext],[data-qshow],[data-qpanel],[data-langpick],[data-install],[data-resetpass],[data-savedlink],[data-read],[data-jy],[data-jtp],[data-jsaved],[data-jclear],[data-jmore],[data-jkw],[data-jreset],[data-readslink],#dfav,#dshare,#aread,#acite,#ashare");
   if (!el) return;
   var d = el.dataset;
   if ("fav" in d) { e.preventDefault(); el.setAttribute("aria-pressed", toggleFav(d.fav)); if (filt.saved && route() === "products") refreshGrid(); return; }
@@ -662,17 +678,34 @@ document.addEventListener("click", function (e) {
   if ("tagf" in d) { filt.tag = filt.tag === d.tagf ? "" : d.tagf; refreshGrid(true); return; }
   if ("saved" in d) { filt.saved = !filt.saved; refreshGrid(true); return; }
   if ("clear" in d) { filt = { cat: "", tag: "", q: "", saved: false }; render(); return; }
-  if ("qstart" in d) { qz = { qs: shuffle(QUIZ).slice(0, QUIZ_LEN), i: 0, res: [], picked: null }; render(); return; }
+  if ("qstart" in d) { qz = { qs: shuffle(QUIZ).slice(0, QUIZ_LEN), i: 0, res: [], tried: [], solved: false, shown: false, open: false }; render(); return; }
   if ("opt" in d) {
-    if (qz.picked !== null) return;
-    qz.picked = +d.opt; qz.res.push(qz.picked === qz.qs[qz.i].a); render(true);
-    var qq = qz.qs[qz.i], qo = Array.isArray(qq.o) ? qq.o : L(qq.o);
-    announce(qz.picked === qq.a ? t("qRight") : t("qWrong") + " " + t("rightAns", { a: qo[qq.a] }));
-    var nx = $("[data-qnext]"); if (nx) nx.focus({ preventScroll: true });
+    var qq = qz.qs[qz.i], qo = Array.isArray(qq.o) ? qq.o : L(qq.o), pick = +d.opt;
+    if (qz.solved || qz.shown || qz.tried.indexOf(pick) >= 0) return;
+    if (qz.res.length === qz.i) qz.res.push(pick === qq.a);          /* only the first try scores */
+    if (pick === qq.a) qz.solved = true; else qz.tried.push(pick);
+    render(true);
+    announce(qz.solved ? (qz.tried.length ? t("qRightRetry") : t("qRight")) : t("qTry"));
+    var nf = qz.solved ? $("[data-qnext]") : $(".opts button:not([disabled])"); if (nf) nf.focus({ preventScroll: true });
+    return;
+  }
+  if ("qshow" in d) {
+    var qs2 = qz.qs[qz.i], qo2 = Array.isArray(qs2.o) ? qs2.o : L(qs2.o);
+    qz.shown = true; render(true); announce(t("rightAns", { a: qo2[qs2.a] }));
+    var nb = $("[data-qnext]"); if (nb) nb.focus({ preventScroll: true });
+    return;
+  }
+  if ("qpanel" in d) {
+    qz.open = !qz.open;
+    var pid = qz.qs[qz.i].p;
+    if (qz.open && pid && seen.indexOf(pid) < 0) { seen.push(pid); store.set("seen", JSON.stringify(seen)); }   /* counts for the passport */
+    render(true);
+    if (qz.open) { var pn = $("#qpanel"); pn.focus({ preventScroll: true }); pn.scrollIntoView({ behavior: "smooth", block: "nearest" }); }
+    else { var tg = $(".qbtns [data-qpanel]"); if (tg) tg.focus({ preventScroll: true }); $(".qtext").scrollIntoView({ behavior: "smooth", block: "nearest" }); }
     return;
   }
   if ("qnext" in d) {
-    qz.i++; qz.picked = null;
+    qz.i++; qz.tried = []; qz.solved = false; qz.shown = false; qz.open = false;
     if (qz.i >= qz.qs.length) { var s = qz.res.filter(Boolean).length; if (s > (+store.get("best") || 0)) store.set("best", String(s)); }
     render(); return;
   }

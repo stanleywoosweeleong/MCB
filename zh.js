@@ -17,7 +17,7 @@ var ZH = {
     back: "返回", save: "收藏", unsave: "已收藏", share: "分享", page: "手册第 {n} 页", highlights: "产品亮点", about: "关于",
     health: "功效说明摘自马来西亚可可局的手册，仅供一般参考，并非医疗建议。",
     visit: "打开网站", getApp: "到 Google Play 下载", close: "关闭", rightAns: "正确答案：{a}", confirmReset: "要清除已发现的产品和问答分数吗？", citeFail: "无法复制，请手动选取文字。", saveFor: "保存：{t}", readPaper: "阅读论文（ResearchGate）", related: "您可能也喜欢", prev: "上一项", next: "下一项", copied: "链接已复制", savedMsg: "已收藏", removedMsg: "已移除",
-    qStart: "开始", qNext: "下一题", qFinish: "查看得分", qRight: "答对了！", qWrong: "答错了。", qSee: "查看产品",
+    qStart: "开始", qNext: "下一题", qFinish: "查看得分", qRight: "答对了！", qWrong: "答错了。", qSee: "了解这项产品", qHide: "收起产品介绍", qBack: "回到题目", qTry: "答错了，再选一个试试。", qShow: "显示答案", qShown: "答案在这里。", qRightRetry: "这次答对了！", qFirst: "只有第一次就答对才计分，不过请继续作答，找出正确答案。",
     qDone: ["继续探索吧，答案都在产品介绍里。", "不错！再多看几项产品就能拿满分。", "太棒了，您很了解可可。", "满分！真正的巧克力大师！"],
     qAgain: "再玩一次", qOf: "第 {n} 题，共 {t} 题", yourScore: "您的得分",
     indTitle: "数字看可可", indLead: "马来西亚如今种植的可可很少，却仍是世界主要的可可加工中心之一。",
