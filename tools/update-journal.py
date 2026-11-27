@@ -7,7 +7,7 @@
     python3 tools/update-journal.py --force    # write even if fewer articles than before
 
 Safety: if any page cannot be downloaded the run stops and journal.js is left
-untouched, and a result with fewer articles than the current file is refused
+untouched, and a result that would drop any paper now in the file is refused
 unless --force is given. The file is replaced in one step, never half-written.
 
 Reads each article page (ArticleDetail.aspx?ID=n) for its title, authors,
@@ -18,6 +18,7 @@ import gzip, html, json, os, re, sys, time, urllib.request
 
 BASE = "https://mcj.koko.gov.my/ArticleDetail.aspx?ID=%d"
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+TAG = re.compile(r"</?[A-Za-z][^>]*>")   # a real tag starts with a letter; "p<0.05 ... p>0.05" does not
 STOP_AFTER_MISSES = 40          # consecutive IDs with no article before we assume the end
 
 KEEP = ["RNAi", "MTT", "COALEX-1", "BALB/c", "3D", "GC/MS", "E-nose", "MCB's", "Bagan", "Datuk", "Cocoa-ABE", "Madai", "Kota", "Samarahan", "PAHs", "Snellen", "GC-MS/MS", "LC-MS/MS", "ADSI", "Nissui", "Excel", "ARM", "IAA", "RSM", "DNA", "RNA", "PCR", "SNP", "SNPs", "SSR", "CPB", "VSD", "UV", "HPLC", "GC-MS", "LC-MS", "FTIR", "NMR",
@@ -79,7 +80,7 @@ def field(s, name):
         depth += 1 if t.group(0) != "</span>" else -1
         if depth == 0:
             inner = s[pos:pos + t.start()]
-            return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", inner))).strip()
+            return re.sub(r"\s+", " ", html.unescape(TAG.sub(" ", inner))).strip()
     return ""
 
 
@@ -92,8 +93,10 @@ def parse(s, n):
         m = re.search(r'<div class="flex flex-wrap[^"]*">(.*?)</div>', s[k:k + 8000], flags=re.S)
         if m:
             for x in re.findall(r"<span class='[^']*'>(.*?)</span>", m.group(1), flags=re.S):
-                for part in re.split(r"\s*;\s*", html.unescape(re.sub(r"<[^>]+>", " ", x))):   # some records pack all keywords into one chip
-                    part = re.sub(r"\s+", " ", part).strip(" .;,")
+                for part in re.split(r"\s*;\s*", html.unescape(TAG.sub(" ", x))):   # some records pack all keywords into one chip
+                    part = re.sub(r"\s+", " ", part).strip(" ;,")
+                    if part.endswith(".") and not part.endswith(" L."):       # keep "Theobroma cacao L."
+                        part = part.rstrip(". ")
                     if part:
                         kw.append(part)
     vol = re.search(r"(\d+)\s*(?:\((\d+)\))?[\s/]+(\d{4})", field(s, "labelVol"))   # "Volume 13(1)/2021", "Volume 17 2025"
@@ -117,18 +120,33 @@ def fetch(n):
     return b.decode("utf-8", "replace")
 
 
-def existing_count(path):
+def existing(path):
+    """(ids, body) of the current journal.js; body is everything after the dated header."""
     try:
-        return sum(1 for line in open(path, encoding="utf-8") if line.startswith('{"id"'))
+        text = open(path, encoding="utf-8").read()
     except OSError:
-        return 0
+        return set(), ""
+    ids = {int(m) for m in re.findall(r'^\{"id":(\d+),', text, flags=re.M)}
+    return ids, text[text.find("var MCJ = ["):]
+
+
+def write_atomic(path, text):
+    tmp = path + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        f.write(text)
+    os.replace(tmp, path)             # one step: never a half-written file
 
 
 def main():
-    cache = sys.argv[sys.argv.index("--cache") + 1] if "--cache" in sys.argv else None
-    no_fetch, force = "--no-fetch" in sys.argv, "--force" in sys.argv
-    if cache:
+    args = sys.argv[1:]
+    cache = None
+    if "--cache" in args:
+        k = args.index("--cache")
+        if k + 1 >= len(args) or args[k + 1].startswith("--"):
+            sys.exit("--cache needs a folder name, e.g. --cache pages")
+        cache = args[k + 1]
         os.makedirs(cache, exist_ok=True)
+    no_fetch, force = "--no-fetch" in args, "--force" in args
     arts, misses, n = [], 0, 0
     while misses < STOP_AFTER_MISSES:
         n += 1
@@ -149,26 +167,26 @@ def main():
         a = parse(s, n) if s else None
         if a:
             if path and not cached:   # cache only real article pages, so new IDs are always looked for again
-                open(path, "w", encoding="utf-8").write(s)
+                write_atomic(path, s)
             arts.append(a); misses = 0; print("%4d  %s" % (n, a["t"][:70]), flush=True)
         else:
             misses += 1
     arts.sort(key=lambda a: (-a["y"], -a["v"], -a["i"], -a["id"]))
     out = os.path.join(ROOT, "journal.js")
-    before = existing_count(out)
+    old_ids, old_body = existing(out)
     if not arts:
         sys.exit("Stopped: no articles found. journal.js was not changed.")
-    if len(arts) < before and not force:
-        sys.exit("Stopped: found %d articles but journal.js has %d. Nothing written; use --force if this is expected." % (len(arts), before))
-    tmp = out + ".tmp"
-    with open(tmp, "w", encoding="utf-8") as f:
-        f.write("/* Malaysian Cocoa Journal index. Generated by tools/update-journal.py from\n"
-                "   mcj.koko.gov.my on %s. Do not edit by hand. */\n" % time.strftime("%Y-%m-%d"))
-        f.write('var MCJ_READ = "%s";\nvar MCJ = [\n' % time.strftime("%Y-%m-%d"))
-        f.write(",\n".join(json.dumps(a, ensure_ascii=False, separators=(",", ":")) for a in arts))
-        f.write("\n];\n")
-    os.replace(tmp, out)              # one step: never a half-written file
-    print("%d articles written to journal.js (was %d)" % (len(arts), before))
+    lost = sorted(old_ids - {a["id"] for a in arts})
+    if lost and not force:            # compare the papers themselves, not just how many there are
+        sys.exit("Stopped: %d paper(s) now in journal.js would disappear (IDs %s). Nothing written; use --force if this is expected."
+                 % (len(lost), ", ".join(map(str, lost[:20]))))
+    body = "var MCJ = [\n" + ",\n".join(json.dumps(a, ensure_ascii=False, separators=(",", ":")) for a in arts) + "\n];\n"
+    if body == old_body:              # nothing changed: leave the file (and its date) alone, so no needless app update
+        print("No change: journal.js already has these %d articles." % len(arts)); return
+    today = time.strftime("%Y-%m-%d")
+    write_atomic(out, "/* Malaysian Cocoa Journal index. Generated by tools/update-journal.py from\n"
+                      "   mcj.koko.gov.my on %s. Do not edit by hand. */\n" % today + 'var MCJ_READ = "%s";\n' % today + body)
+    print("%d articles written to journal.js (was %d)" % (len(arts), len(old_ids)))
 
 
 if __name__ == "__main__":

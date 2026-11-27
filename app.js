@@ -612,7 +612,8 @@ function showLangPick(on) {
   document.body.classList.toggle("picking", on);
   [$("#top"), $("#view"), $("#tabs"), $("#toast"), $("#snack")].forEach(function (n) { n.inert = on; });
   if (on) $("#langpick").focus();
-  else if (pickOpener && document.contains(pickOpener)) pickOpener.focus({ preventScroll: true });
+  else if (pickOpener && pickOpener !== document.body && document.contains(pickOpener)) pickOpener.focus({ preventScroll: true });
+  else if (pickOpener === document.body) $("#view").focus({ preventScroll: true });
   else $("#langbtn").focus({ preventScroll: true });
 }
 document.addEventListener("keydown", function (e) {
@@ -631,7 +632,7 @@ window.addEventListener("hashchange", function () {
   var nr = route();
   if (nr.indexOf("p/") === 0 && lastRoute.indexOf("p/") !== 0) scrolls.products = lastRoute === "products" ? window.scrollY : 0;
   if (nr.indexOf("a/") === 0 && lastRoute.indexOf("a/") !== 0) scrolls.journal = lastRoute === "journal" ? window.scrollY : 0;
-  if (route() !== "quiz" && route().indexOf("p/") !== 0) qz = null;
+  if (route() !== "quiz") qz = null;
   render();
 });
 $("#langbtn").onclick = function () { showLangPick(true); };
@@ -694,10 +695,11 @@ document.addEventListener("click", function (e) {
   if ("tagf" in d) { filt.tag = filt.tag === d.tagf ? "" : d.tagf; refreshGrid(true); return; }
   if ("saved" in d) { filt.saved = !filt.saved; refreshGrid(true); return; }
   if ("clear" in d) { filt = { cat: "", tag: "", q: "", saved: false }; render(); return; }
-  if ("qstart" in d) { qz = { qs: quizRound(), i: 0, res: [], tried: [], solved: false, shown: false, open: false }; render(); return; }
+  if ("qstart" in d) { qz = { qs: quizRound(), i: 0, res: [], tried: [], solved: false, shown: false, open: false, at: Date.now() }; render(); return; }
   if ("opt" in d) {
     var qq = qz.qs[qz.i], qo = Array.isArray(qq.o) ? qq.o : L(qq.o), pick = +d.opt;
     if (qz.solved || qz.shown || qz.tried.indexOf(pick) >= 0) return;
+    if (Date.now() - qz.at < 450 && e.detail > 1) return;       /* second half of a double tap on "Next" */
     if (qz.res.length === qz.i) qz.res.push(pick === qq.a);          /* only the first try scores */
     if (pick === qq.a) qz.solved = true; else qz.tried.push(pick);
     render(true);
@@ -721,7 +723,7 @@ document.addEventListener("click", function (e) {
     return;
   }
   if ("qnext" in d) {
-    qz.i++; qz.tried = []; qz.solved = false; qz.shown = false; qz.open = false;
+    qz.i++; qz.tried = []; qz.solved = false; qz.shown = false; qz.open = false; qz.at = Date.now();
     if (qz.i >= qz.qs.length) { var s = qz.res.filter(Boolean).length; if (s > (+store.get("best") || 0)) store.set("best", String(s)); }
     render(); return;
   }

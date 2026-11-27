@@ -314,7 +314,6 @@ blockquote small{display:block;margin-top:8px;color:var(--muted);font-size:.8rem
 /* ── quiz: retry and the in-place product panel ── */
 .qbtns{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto}
 .qhint{font-size:.84rem;color:var(--muted);margin-top:10px}
-.opts button.no{opacity:.75}
 .qpanel{position:relative;margin-top:18px;padding:18px 16px 16px;animation:rise .28s ease both;outline:0}
 .qpanel .qx{position:absolute;top:8px;right:8px;width:42px;height:42px;border-radius:50%;border:0;background:var(--sunk);font-size:1rem}
 .qphead{display:flex;gap:14px;align-items:center;padding-right:44px}

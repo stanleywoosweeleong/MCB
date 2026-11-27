@@ -369,7 +369,7 @@ var QUIZ_J = [
   { j: 161, a: 2, o: ["21–22°C", "26–27°C", "31–32°C", "41–42°C"],
     q: { en: "In bean-to-bar production, what final tempering temperature is essential for dark chocolate?", ms: "Dalam penghasilan biji-ke-bar, berapakah suhu pembajaan (tempering) akhir yang penting bagi coklat gelap?", zh: "在“从豆到棒”工艺中，黑巧克力的最终调温温度应是多少？" } },
   { j: 161, a: 1, o: ["2–3 μm", "20–30 μm", "200–300 μm", "2,000 μm"],
-    q: { en: "What particle size gives dark chocolate its smooth mouthfeel in bean-to-bar production?", ms: "Saiz zarah berapakah yang memberi coklat gelap rasa licin di mulut dalam penghasilan biji-ke-bar?", zh: "在“从豆到棒”工艺中，多大的颗粒尺寸能让黑巧克力口感细滑？" } },
+    q: { en: "What particle size does bean-to-bar production aim for in dark chocolate?", ms: "Berapakah saiz zarah yang disasarkan bagi coklat gelap dalam penghasilan biji-ke-bar?", zh: "在“从豆到棒”工艺中，黑巧克力的目标颗粒尺寸是多少？" } },
   { j: 172, a: 1, o: { en: ["Greenhouses", "Bioreactors", "Fermentation boxes", "Drying beds"], ms: ["Rumah hijau", "Bioreaktor", "Kotak fermentasi", "Para pengeringan"], zh: ["温室", "生物反应器", "发酵箱", "晒豆床"] },
     q: { en: "In lab-grown chocolate made by plant cell culture, where are the cacao cells grown?", ms: "Bagi coklat makmal yang dihasilkan melalui kultur sel tumbuhan, di manakah sel koko dibiakkan?", zh: "以植物细胞培养制作的“实验室巧克力”，可可细胞是在哪里培养的？" } },
   { j: 171, a: 0, o: { en: ["At planting", "At harvest", "During fermentation", "During pruning"], ms: ["Semasa menanam", "Semasa menuai", "Semasa fermentasi", "Semasa memangkas"], zh: ["种植时", "采收时", "发酵时", "修剪时"] },
