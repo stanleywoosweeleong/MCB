@@ -50,6 +50,14 @@ mcj.koko.gov.my (slowly, to be gentle on the server) and rewrites `journal.js`. 
 If any page cannot be downloaded the tool stops and leaves `journal.js` untouched, and it refuses to write a result
 with fewer papers than before unless you add `--force`.
 
+## Sharing an address with other apps
+
+This app lives beside other apps on the same GitHub Pages address, so two things must stay unique to it:
+
+- The manifest `id` is `/MCB/`. Do not change it to `./`: an `id` is resolved against the site root, not the app's folder,
+  so `./` would give every app on the address the same identity and Chrome would treat them as one installed app.
+- Cache names start with `kokolab-`, and the service worker only ever deletes caches with that prefix.
+
 ## Content notes
 
 - Journal abstracts and papers are the copyright of the Malaysian Cocoa Journal and their authors. The journal's copyright page
