@@ -17,6 +17,7 @@ var SHELL = [
   "./styles.css",
   "./app.js",
   "./data.js",
+  "./zh.js",
   "./journal.js",
   "./manifest.webmanifest",
   "./fonts/anton.woff2",

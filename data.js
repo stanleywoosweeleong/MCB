@@ -53,7 +53,7 @@ var PRODUCTS = [
   pts: { en: ["IoT-based soil nutrient content reference", "Portable", "Real-time", "Rapid and non-destructive: fast data reference and a reading method that does not damage the soil", "Ready product, available in the market"],
          ms: ["Rujukan kandungan nutrien tanah berasaskan IoT", "Mudah alih", "Masa nyata", "Pantas dan tidak merosakkan: rujukan data segera dengan kaedah bacaan yang tidak merosakkan tanah", "Produk sedia ada di pasaran"] } },
 
-{ id: "atipm", cat: "A", n: 3, page: 8, img: "atipm", name: "AT-IPM CACAO", tags: ["pest", "digital"],
+{ id: "atipm", cat: "A", n: 3, page: 8, img: "atipm", name: "AT-IPM CACAO", tags: ["pest", "digital"], link: "https://play.google.com/store/apps/details?id=my.gov.onegovappstore.atipm", linkApp: true,
   sub: { en: "Action Threshold – Integrated Pest Management", ms: "Ambang Tindakan – Pengurusan Perosak Bersepadu" },
   desc: { en: "AT-IPM CACAO is a decision-making application for Cocoa Pod Borer (CPB) control actions. This application can provide a schedule with date ranges for when control measures need to be implemented. It can reduce insecticide usage for CPB control by up to 50% yearly.",
           ms: "AT-IPM CACAO ialah aplikasi membuat keputusan bagi tindakan kawalan Ulat Pengorek Buah Koko (UPBK). Aplikasi ini menyediakan jadual dengan julat tarikh bila langkah kawalan perlu dilaksanakan. Ia boleh mengurangkan penggunaan racun serangga untuk kawalan UPBK sehingga 50% setahun." },
@@ -74,7 +74,7 @@ var PRODUCTS = [
   pts: { en: ["Direct information dissemination to users", "Free access", "Clear and easy-to-understand explanations"],
          ms: ["Penyebaran maklumat terus kepada pengguna", "Akses percuma", "Penerangan yang jelas dan mudah difahami"] } },
 
-{ id: "geococoa", cat: "A", n: 6, page: 11, img: "geococoa", name: "GEOCOCOA", tags: ["pest", "digital"],
+{ id: "geococoa", cat: "A", n: 6, page: 11, img: "geococoa", name: "GEOCOCOA", tags: ["pest", "digital"], link: "https://www.researchgate.net/publication/384168570_GEOCOCOA_Geoentomology_Intelligent_Distribution_and_Mapping_System_for_Cocoa_Pests_in_Peninsula_Malaysia", linkPaper: true,
   sub: { en: "Geoentomology Intelligence Distribution and Mapping System", ms: "Sistem Pemetaan dan Taburan Perisikan Geoentomologi" },
   desc: { en: "GEOCOCOA is a web portal developed to monitor the severity of cocoa pest and disease infestations based on mapping and heat maps across 123 cocoa grower locations in Peninsular Malaysia.",
           ms: "GEOCOCOA ialah portal web yang dibangunkan untuk memantau tahap keterukan serangan perosak dan penyakit koko berdasarkan pemetaan dan peta haba di 123 lokasi pekebun koko di Semenanjung Malaysia." },
@@ -429,5 +429,6 @@ var PORTALS = [
   { n: "Cocoa Germplasm Database", u: "https://germplasm.koko.my/", en: "Phenotypic and genotypic data on cocoa germplasm evaluated at the Board's research centres.", ms: "Data fenotip dan genotip germplasma koko yang dinilai di pusat penyelidikan LKM." },
   { n: "CocoaSafe", u: "https://cocoasafe.koko.gov.my/", en: "Producing and trading cocoa that meets food safety and international SPS standards.", ms: "Pengeluaran dan perdagangan koko yang memenuhi piawaian keselamatan makanan dan SPS antarabangsa." },
   { n: "KOKO Duniaku", u: "https://portalduniaku.koko.my/", en: "For the public (in Malay): the story of cocoa, how chocolate is made, recipes, nutrition and a cocoa club.", ms: "Untuk orang ramai: asal usul koko, pembuatan coklat, resipi, khasiat dan kelab koko." },
-  { n: "ASEAN Cocoa Club", u: "https://acc.koko.gov.my/", en: "Website of the ASEAN Cocoa Club (ACC).", ms: "Laman web ASEAN Cocoa Club (ACC)." }
+  { n: "ASEAN Cocoa Club", u: "https://acc.koko.gov.my/", en: "Website of the ASEAN Cocoa Club (ACC).", ms: "Laman web ASEAN Cocoa Club (ACC)." },
+  { n: "AT-IPM CACAO", u: "https://play.google.com/store/apps/details?id=my.gov.onegovappstore.atipm", p: "atipm", app: true, en: "Android app on Google Play: plan when to act against cocoa pod borer.", ms: "Aplikasi Android di Google Play: rancang masa tindakan kawalan ulat pengorek buah koko." }
 ];

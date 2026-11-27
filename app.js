@@ -15,7 +15,7 @@ var store = {
 };
 
 /* ── language ── */
-var LANGS = { en: "en", ms: "ms" };
+var LANGS = { en: "en", ms: "ms", zh: "zh-Hans" };
 var LANG = store.get("lang");
 var FIRST_LAUNCH = !LANGS[LANG];
 if (FIRST_LAUNCH) LANG = "en";
@@ -35,7 +35,7 @@ var T = {
     back: "Back", save: "Save", unsave: "Saved", share: "Share", page: "Booklet p. {n}", highlights: "Highlights", about: "About",
     health: "Benefits are as described in the Malaysian Cocoa Board's booklet. This is general information, not medical advice.",
     partial: "The page for this product was missing or unreadable in the scanned booklet, so only its name and short description from the contents page are shown.",
-    visit: "Open the portal", related: "You may also like", prev: "Previous", next: "Next", copied: "Link copied", savedMsg: "Saved", removedMsg: "Removed",
+    visit: "Open the portal", getApp: "Get it on Google Play", readPaper: "Read the paper (ResearchGate)", related: "You may also like", prev: "Previous", next: "Next", copied: "Link copied", savedMsg: "Saved", removedMsg: "Removed",
     qStart: "Start", qNext: "Next question", qFinish: "See my score", qRight: "Correct!", qWrong: "Not quite.", qSee: "See the product",
     qDone: ["Keep exploring, the answers are all in the products.", "Good going. A few more products and you'll ace it.", "Excellent. You know your cocoa.", "Perfect score. A true chocolatier!"],
     qAgain: "Play again", qOf: "Question {n} of {t}", yourScore: "Your score",
@@ -62,7 +62,7 @@ var T = {
     jProducts: "From lab to market", jProductsS: "MCB products connected to this research", research: "Research behind this", researchS: "Papers from the Malaysian Cocoa Journal on related work",
     latest: "Latest research", jNote: "Abstracts and papers are the copyright of the Malaysian Cocoa Journal and their authors. Full papers need an internet connection.", jEnOnly: "",
     topics: { pest: "Pests & diseases", breed: "Breeding & genetics", agro: "Soil & agronomy", proc: "Processing & chocolate", health: "Health & personal care", safety: "Safety & analysis", waste: "By-products", econ: "Economics & extension" },
-    mPortals: "MCB web portals", mPortalsS: "{n} official sites, one tap away", portalsLead: "Official Malaysian Cocoa Board sites. Each opens in your browser and needs an internet connection.", open: "Open", seeProduct: "About this in KokoLab", portalsHome: "Go to the source",
+    mPortals: "MCB portals and apps", mPortalsS: "{n} official links, one tap away", portalsLead: "Official Malaysian Cocoa Board sites. Each opens in your browser and needs an internet connection.", open: "Open", seeProduct: "About this in KokoLab", portalsHome: "Go to the source",
     mInd: "Cocoa in numbers", mIndS: "Production, grindings, exports and prices", mReads: "Reading list", mReadsS: "{n} papers saved",
     version: "This copy: {d}", newVer: "A new version is ready", refresh: "Refresh"
   },
@@ -80,7 +80,7 @@ var T = {
     back: "Kembali", save: "Simpan", unsave: "Disimpan", share: "Kongsi", page: "Buku kecil ms. {n}", highlights: "Ciri utama", about: "Perihal",
     health: "Manfaat adalah seperti yang dinyatakan dalam buku kecil Lembaga Koko Malaysia. Ini maklumat umum, bukan nasihat perubatan.",
     partial: "Halaman produk ini tiada atau tidak dapat dibaca dalam imbasan buku kecil, jadi hanya nama dan huraian ringkas daripada halaman kandungan dipaparkan.",
-    visit: "Buka portal", related: "Anda mungkin juga suka", prev: "Sebelum", next: "Seterusnya", copied: "Pautan disalin", savedMsg: "Disimpan", removedMsg: "Dibuang",
+    visit: "Buka portal", getApp: "Dapatkan di Google Play", readPaper: "Baca kertas kajian (ResearchGate)", related: "Anda mungkin juga suka", prev: "Sebelum", next: "Seterusnya", copied: "Pautan disalin", savedMsg: "Disimpan", removedMsg: "Dibuang",
     qStart: "Mula", qNext: "Soalan seterusnya", qFinish: "Lihat markah saya", qRight: "Betul!", qWrong: "Kurang tepat.", qSee: "Lihat produk",
     qDone: ["Teruskan meneroka, semua jawapan ada dalam produk.", "Bagus. Teroka beberapa produk lagi untuk markah penuh.", "Cemerlang. Anda memang kenal koko.", "Markah penuh. Chocolatier sejati!"],
     qAgain: "Main lagi", qOf: "Soalan {n} daripada {t}", yourScore: "Markah anda",
@@ -107,12 +107,14 @@ var T = {
     jProducts: "Dari makmal ke pasaran", jProductsS: "Produk LKM yang berkaitan dengan penyelidikan ini", research: "Penyelidikan di sebaliknya", researchS: "Kertas daripada Malaysian Cocoa Journal tentang kerja berkaitan",
     latest: "Penyelidikan terkini", jNote: "Abstrak dan kertas ialah hak cipta Malaysian Cocoa Journal dan penulisnya. Kertas penuh memerlukan sambungan internet.", jEnOnly: "Jurnal ini diterbitkan dalam Bahasa Inggeris.",
     topics: { pest: "Perosak & penyakit", breed: "Pembiakbakaan & genetik", agro: "Tanah & agronomi", proc: "Pemprosesan & coklat", health: "Kesihatan & penjagaan diri", safety: "Keselamatan & analisis", waste: "Hasil sampingan", econ: "Ekonomi & pengembangan" },
-    mPortals: "Portal web LKM", mPortalsS: "{n} laman rasmi, satu tekan sahaja", portalsLead: "Laman rasmi Lembaga Koko Malaysia. Setiap satu dibuka dalam pelayar anda dan memerlukan sambungan internet.", open: "Buka", seeProduct: "Perihal ini dalam KokoLab", portalsHome: "Terus ke sumber",
+    mPortals: "Portal dan aplikasi LKM", mPortalsS: "{n} pautan rasmi, satu tekan sahaja", portalsLead: "Laman rasmi Lembaga Koko Malaysia. Setiap satu dibuka dalam pelayar anda dan memerlukan sambungan internet.", open: "Buka", seeProduct: "Perihal ini dalam KokoLab", portalsHome: "Terus ke sumber",
     mInd: "Koko dalam angka", mIndS: "Pengeluaran, pengisaran, eksport dan harga", mReads: "Senarai bacaan", mReadsS: "{n} kertas disimpan",
     version: "Salinan ini: {d}", newVer: "Versi baharu sudah sedia", refresh: "Muat semula"
   }
 };
+if (typeof ZH !== "undefined") T.zh = ZH.ui;
 function t(k, v) {
+  if (!T[LANG]) LANG = "en";
   var s = T[LANG][k]; if (s === undefined) s = T.en[k];
   if (v && typeof s === "string") for (var x in v) s = s.replace("{" + x + "}", v[x]);
   return s;
@@ -121,7 +123,7 @@ function L(o) { return o == null ? "" : (typeof o === "string" ? o : (o[LANG] !=
 function num(n) { return Number(n).toLocaleString("en-MY"); }
 function fmtDate(iso) {
   var d = new Date(iso + "T00:00:00");
-  try { return d.toLocaleDateString(LANG === "ms" ? "ms-MY" : "en-GB", { day: "numeric", month: "long", year: "numeric" }); } catch (e) { return iso; }
+  try { return d.toLocaleDateString(LANG === "ms" ? "ms-MY" : LANG === "zh" ? "zh-CN" : "en-GB", { day: "numeric", month: "long", year: "numeric" }); } catch (e) { return iso; }
 }
 
 /* ── state ── */
@@ -153,9 +155,9 @@ var reads = store.list("reads").filter(function (id) { return artById[id]; });
 var jf = { q: "", y: 0, tp: "", saved: false }, jShown = 30;
 /* which papers sit behind which product (matched on title + keywords) */
 var PRODUCT_RX = {
-  terraprobe: /soil moisture|internet of things|\biot\b/, agrosense: /soil nutrient|internet of things|\biot\b|sensor/, atipm: /pod borer/, hyfer: /fertili[sz]er|zeolite/,
+  terraprobe: /soil moisture|internet of things|\biot\b/, agrosense: /soil nutrient|internet of things|\biot\b|\bsensors?\b/, atipm: /pod borer/, hyfer: /fertili[sz]er|zeolite/,
   croped: /pest|disease/, geococoa: /mapping|\bgis\b|spatial/, biocontrol: /biocontrol|biological control|biopesticide|black pod/, biochar: /biochar/,
-  cocoamat: /harvesting tool|mechani[sz]/, carbon: /activated carbon/, diet: /artificial diet|sterile insect|rearing/, bioaction: /endophytic/,
+  cocoamat: /harvesting tool|harvester/, carbon: /activated carbon/, diet: /artificial diet|sterile insect|rearing/, bioaction: /endophytic/,
   bioshield: /biofertili[sz]er|water stress|drought|flood/, kokocorrect: /genotyping|snp|molecular marker|clone identification|fingerprint/, kokoselect: /snp|genomic selection|marker-assisted/,
   lipstick: /lipstick|lip balm/, moisturizer: /moisturi[sz]|skin/, cleanser: /cleanser|skin/, toner: /toner|skin/, scrub: /scrub/, antiwrinkle: /wrinkle|anti-ag|skin/,
   footcream: /foot|skin crack/, footscrub: /foot|scrub/, shampoo: /shampoo|hair|dandruff/, barshampoo: /shampoo|hair|dandruff/, conditioner: /conditioner|hair/, barconditioner: /conditioner|hair/,
@@ -367,7 +369,7 @@ function vDetail(id) {
     '<span class="pill">' + esc(L(CATS[p.cat])) + " · " + p.n + "/" + sib.length + "</span><h1>" + esc(p.name) + '</h1><p class="sub">' + esc(L(p.sub)) + "</p>" +
     '<div class="actions"><button class="btn ' + (fav ? "" : "soft") + '" type="button" id="dfav" aria-pressed="' + fav + '">' + I.heart + "<span>" + t(fav ? "unsave" : "save") + "</span></button>" +
     '<button class="btn soft" type="button" id="dshare">' + I.share + t("share") + "</button>" +
-    (p.link ? '<a class="btn soft" href="' + p.link + '" target="_blank" rel="noopener">' + I.link + t("visit") + "</a>" : "") + "</div>" +
+    (p.link ? '<a class="btn soft" href="' + p.link + '" target="_blank" rel="noopener">' + I.link + t(p.linkApp ? "getApp" : p.linkPaper ? "readPaper" : "visit") + "</a>" : "") + "</div>" +
     (p.desc ? '<p class="desc">' + esc(L(p.desc)) + "</p>" : "") +
     (pts.length ? "<h2>" + t("highlights") + '</h2><ul class="pts">' + pts.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>" : "") +
     (p.partial ? '<p class="note">' + t("partial") + "</p>" : "") +
@@ -487,17 +489,17 @@ function vMore() {
     item(I.reset, t("mReset"), t("mResetS"), 'type="button" data-resetpass', "button") +
     "</div>" + footer() + "</div>";
 }
-function host(u) { return u.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, ""); }
+function host(u) { return u.replace(/^https?:\/\/(www\.)?/, "").replace(/[\/?].*$/, ""); }
 function vPortals() {
   return '<a class="back" href="#/more">← ' + t("more") + '</a><div class="page"><h1>' + t("mPortals") + '</h1><p class="lead">' + t("portalsLead") + '</p><div class="list sect">' + PORTALS.map(function (o) {
     return '<div class="card office"><span class="pill" style="color:var(--accent)">' + host(o.u) + "</span><h3>" + esc(o.n) + "</h3><p>" + esc(L(o)) + '</p><div class="row">' +
-      '<a class="btn" href="' + o.u + '" target="_blank" rel="noopener">' + I.link + t("open") + "</a>" +
+      '<a class="btn" href="' + o.u + '" target="_blank" rel="noopener">' + I.link + t(o.app ? "getApp" : "open") + "</a>" +
       (o.p ? '<a class="btn soft" href="#/p/' + o.p + '">' + t("seeProduct") + "</a>" : "") + "</div></div>";
   }).join("") + "</div></div>";
 }
 function vAbout() {
   var q = function (k) {
-    return '<section class="sect"><h2>' + t(k) + '</h2><blockquote class="card">' + esc(L(ABOUT[k])) + (LANG === "en" ? "<small>" + t("unofficial") + "</small>" : "") + "</blockquote></section>";
+    return '<section class="sect"><h2>' + t(k) + '</h2><blockquote class="card">' + esc(L(ABOUT[k])) + (LANG !== "ms" ? "<small>" + t("unofficial") + "</small>" : "") + "</blockquote></section>";
   };
   return '<a class="back" href="#/more">← ' + t("more") + '</a><div class="page"><h1>' + t("aboutTitle") + '</h1><p class="lead">' + t("aboutLead") + "</p>" + q("vision") + q("mission") +
     '<section class="sect"><h2>' + t("functions") + '</h2><ul class="pts cat-A">' + ABOUT.functions[LANG].map(function (f) { return "<li>" + esc(f) + "</li>"; }).join("") + "</ul></section>" +
@@ -539,8 +541,8 @@ function render(keepScroll) {
 }
 function applyLang() {
   document.documentElement.lang = LANGS[LANG];
-  $("#langbtn").textContent = LANG === "en" ? "BM" : "EN";
-  $("#langbtn").setAttribute("aria-label", LANG === "en" ? "Tukar ke Bahasa Melayu" : "Switch to English");
+  $("#langbtn").textContent = { en: "EN", ms: "BM", zh: "中文" }[LANG];
+  $("#langbtn").setAttribute("aria-label", "Language · Bahasa · 语言");
   $("#toasttxt").textContent = t("newVer"); $("#toastgo").textContent = t("refresh");
   render(true);
 }
@@ -565,9 +567,9 @@ window.addEventListener("hashchange", function () {
   if (route() !== "quiz" && route().indexOf("p/") !== 0) qz = null;
   render();
 });
-$("#langbtn").onclick = function () { setLang(LANG === "en" ? "ms" : "en"); };
+$("#langbtn").onclick = function () { showLangPick(true); };
 $("#langpick").onclick = function (e) {
-  if (setLang(e.target.getAttribute("data-lang"))) { showLangPick(false); window.scrollTo(0, 0); }
+  if (setLang(e.target.getAttribute("data-lang"))) { showLangPick(false); if (FIRST_LAUNCH) { FIRST_LAUNCH = false; window.scrollTo(0, 0); } }
 };
 $("#tabs").addEventListener("click", function (e) {
   var a = e.target.closest("a");

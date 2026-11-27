@@ -14,9 +14,9 @@ industry figures come from [koko.gov.my](https://www.koko.gov.my/); the journal 
 - **Cocoa passport** that fills up as products are opened, plus a "Surprise me" button
 - **Quiz** with six random questions per round, drawn from the booklet
 - **Industry in numbers**: production, grindings, planted area, exports and a bean price snapshot
-- **MCB web portals**: one-tap links to eight official sites (koko.gov.my, the journal, CROPED, E-Cocoa, germplasm database, CocoaSafe, KOKO Duniaku, ASEAN Cocoa Club)
+- **MCB portals and apps**: one-tap links to eight official sites (koko.gov.my, the journal, CROPED, E-Cocoa, germplasm database, CocoaSafe, KOKO Duniaku, ASEAN Cocoa Club) and the AT-IPM CACAO app on Google Play
 - **About the Board** and a tap-to-call **directory** of 14 offices and research centres
-- **English and Bahasa Melayu**, chosen on first launch and remembered
+- **English, Bahasa Melayu and 中文 (Simplified Chinese)**, chosen on first launch and remembered
 - Works offline, follows the phone's light or dark theme, and updates itself
 
 ## Run it
@@ -36,6 +36,7 @@ a script or the stylesheet has changed. GitHub Pages takes a minute or two to pu
 | File | What it holds |
 |---|---|
 | `data.js` | Products, quiz, statistics, offices |
+| `zh.js` | Chinese text for the interface and all content |
 | `journal.js` | Journal index. Generated, do not edit by hand |
 | `tools/update-journal.py` | Rebuilds `journal.js` from mcj.koko.gov.my |
 | `app.js` | Screens, navigation, interface text in both languages |
@@ -53,7 +54,8 @@ mcj.koko.gov.my (slowly, to be gentle on the server) and rewrites `journal.js`. 
   asks for written permission from the MCJ Editor before reproduction, so get that before releasing the app publicly.
 - Journal titles are shown in sentence case (the site lists them in capitals); a few scientific names or acronyms may be mis-cased.
 
-- The Malay product text is an unofficial translation and should be reviewed by a native speaker.
+- The Malay and Chinese texts are unofficial translations and should be reviewed by native speakers.
+  Journal papers stay in English, the language they are published in.
 - Statistics were read from koko.gov.my on 27 November 2026; bean prices are the list dated 26 November 2026.
   Update `STATS` in `data.js` when new figures are published.
 - The Anton typeface is used under the SIL Open Font License.
