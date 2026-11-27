@@ -2,7 +2,7 @@
   "name": "KokoLab · Malaysian cocoa innovations",
   "short_name": "KokoLab",
   "description": "Interactive pocket guide to the Malaysian Cocoa Board's R&D products and technologies. Unofficial companion app.",
-  "id": "./",
+  "id": "/MCB/",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
