@@ -39,8 +39,6 @@ a script or the stylesheet has changed. GitHub Pages takes a minute or two to pu
 
 ## Content notes
 
-- Four products (Anti-Dandruff Hair Gel, Cocoa Ice Creams, FLAVINT, Chocolate Spread) had missing or
-  unreadable pages in the scan, so only their names and short descriptions are shown. Fill them in in `data.js`.
 - The Malay product text is an unofficial translation and should be reviewed by a native speaker.
 - Statistics were read from koko.gov.my on 27 November 2026; bean prices are the list dated 26 November 2026.
   Update `STATS` in `data.js` when new figures are published.

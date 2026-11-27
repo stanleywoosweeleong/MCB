@@ -26,6 +26,7 @@ var TAGS = {
   drink:    { en: "Drinks", ms: "Minuman", cat: "C" },
   extract:  { en: "Extracts & supplements", ms: "Ekstrak & suplemen", cat: "C" },
   nosugar:  { en: "No refined sugar", ms: "Tanpa gula bertapis", cat: "C" },
+  dessert:  { en: "Ice cream", ms: "Aiskrim", cat: "C" },
   waste:    { en: "Made from by-products", ms: "Daripada hasil sampingan", cat: "" }
 };
 
@@ -139,8 +140,8 @@ var PRODUCTS = [
   sub: { en: "Bio-diagnostic kit", ms: "Kit bio-diagnostik" },
   desc: { en: "The global cocoa genome sequencing project has significantly advanced the genetic improvement of cocoa trees. Through KokoSelect, SNPs (Single Nucleotide Polymorphisms) associated with favorable agronomic traits, such as high cocoa fat content, better yields, and resistance to pests and diseases (including Cocoa Pod Borer, Black Pod Disease, and VSD), can be identified. This enables farmers to select superior seedlings without wasting time and resources evaluating large numbers of cocoa seedlings.",
           ms: "Projek penjujukan genom koko sedunia telah memajukan pembaikan genetik pokok koko dengan ketara. Melalui KokoSelect, SNP (Polimorfisme Nukleotida Tunggal) yang berkait dengan ciri agronomi yang baik, seperti kandungan lemak koko tinggi, hasil lebih baik dan ketahanan terhadap perosak dan penyakit (termasuk UPBK, penyakit buah hitam dan VSD), dapat dikenal pasti. Ini membolehkan pekebun memilih anak benih unggul tanpa membazir masa dan sumber menilai anak benih dalam jumlah yang banyak." },
-  pts: { en: ["An advanced bio-diagnostic solution for cocoa farmers and breeders, using molecular technology to identify seedlings with superior agronomic traits", "Uses genetic markers (SNPs) linked to disease resistance and high yield", "Accurate, reliable, and cost-effective identification of high-performing planting materials", "Promotes sustainable cocoa farming, reduces planting risks, and accelerates the path to profitability and higher productivity"],
-         ms: ["Penyelesaian bio-diagnostik termaju untuk pekebun dan pembiak baka koko, menggunakan teknologi molekul untuk mengenal pasti anak benih dengan ciri agronomi unggul", "Menggunakan penanda genetik (SNP) yang berkait dengan ketahanan penyakit dan hasil tinggi", "Pengenalpastian bahan tanaman berprestasi tinggi yang tepat, boleh dipercayai dan kos efektif", "Menggalakkan penanaman koko lestari, mengurangkan risiko penanaman dan mempercepat laluan ke arah keuntungan serta produktiviti lebih tinggi"] } },
+  pts: { en: ["An advanced bio-diagnostic solution for cocoa farmers and breeders, using molecular technology to identify seedlings with superior agronomic traits", "Genetic markers such as SNPs associated with disease resistance, high yield, and cocoa pod quality", "Accurate, reliable, and cost-effective identification of high-performing planting materials", "Promotes sustainable cocoa farming, reduces planting risks, and accelerates the path to profitability and higher productivity"],
+         ms: ["Penyelesaian bio-diagnostik termaju untuk pekebun dan pembiak baka koko, menggunakan teknologi molekul untuk mengenal pasti anak benih dengan ciri agronomi unggul", "Penanda genetik seperti SNP yang berkait dengan ketahanan penyakit, hasil tinggi dan kualiti buah koko", "Pengenalpastian bahan tanaman berprestasi tinggi yang tepat, boleh dipercayai dan kos efektif", "Menggalakkan penanaman koko lestari, mengurangkan risiko penanaman dan mempercepat laluan ke arah keuntungan serta produktiviti lebih tinggi"] } },
 
 /* ───────── B · Personal care ───────── */
 { id: "lipstick", cat: "B", n: 1, page: 24, img: "lipstick", name: "BEAUTECOA Lipstick", tags: ["face"],
@@ -203,9 +204,10 @@ var PRODUCTS = [
   pts: { en: HAIR_EN.concat(["Positive effects visible within four weeks (when used together with Cocoa Shampoo Bar)"]),
          ms: HAIR_MS.concat(["Kesan positif kelihatan dalam empat minggu (apabila digunakan bersama Bar Syampu Koko)"]) } },
 
-{ id: "antidandruff", cat: "B", n: 13, page: 34, img: "", name: "BEAUTECOA Anti-Dandruff Hair Gel", tags: ["hair"], partial: true,
+{ id: "antidandruff", cat: "B", n: 13, page: 34, img: "antidandruff", name: "BEAUTECOA Anti-Dandruff Hair Gel", tags: ["hair", "waste"],
   sub: { en: "Cocoa-based anti-dandruff hairstyling gel", ms: "Gel penggaya rambut antikelemumur berasaskan koko" },
-  pts: { en: [], ms: [] } },
+  pts: { en: ["Anti-dandruff based on cocoa pod husk extract: contains natural active ingredients proven effective in reducing dandruff formation and maintaining the balance of the scalp microbiota", "Maintains moisture and scalp health: helps control excess oil without drying out the scalp, resulting in healthier and fresher hair", "Comfortable and non-sticky hair hold: helps maintain hairstyle throughout the day with a lightweight texture that does not cause white flakes", "Soothes the scalp and reduces irritation: a gentle formula that helps relieve itchiness and scalp irritation, providing long-term comfort", "Cocoa-based innovation: utilizes the potential of cocoa pod husk in cosmetic products, supporting the Malaysian cocoa industry and enhancing the value of cocoa by-products"],
+         ms: ["Antikelemumur berasaskan ekstrak kulit buah koko: mengandungi bahan aktif semula jadi yang terbukti berkesan mengurangkan pembentukan kelemumur dan mengekalkan keseimbangan mikrobiota kulit kepala", "Mengekalkan kelembapan dan kesihatan kulit kepala: membantu mengawal minyak berlebihan tanpa mengeringkan kulit kepala, untuk rambut lebih sihat dan segar", "Pegangan rambut yang selesa dan tidak melekit: membantu mengekalkan gaya rambut sepanjang hari dengan tekstur ringan yang tidak meninggalkan serpihan putih", "Menenangkan kulit kepala dan mengurangkan kerengsaan: formula lembut yang membantu melegakan kegatalan dan kerengsaan kulit kepala untuk keselesaan jangka panjang", "Inovasi berasaskan koko: memanfaatkan potensi kulit buah koko dalam produk kosmetik, menyokong industri koko Malaysia dan menambah nilai hasil sampingan koko"] } },
 
 { id: "skincare", cat: "B", n: 14, page: 35, img: "skincare", name: "MARVELLES Skin Care", tags: ["face"],
   sub: { en: "Cocoa-based skin care", ms: "Penjagaan kulit berasaskan koko" },
@@ -227,7 +229,7 @@ var PRODUCTS = [
   pts: { en: ["Cocoa and chocolate processed using the bean-to-bar technique", "Rich in minerals and antioxidants", "Well-received by consumers aged 20–45", "Contains a unique and superior fruity flavor profile", "Safe, free from pesticide residues and heavy metals", "Recipient of the national Cacao of Excellence award in 2022"],
          ms: ["Koko dan coklat diproses dengan teknik biji-ke-bar (bean-to-bar)", "Kaya mineral dan antioksidan", "Diterima baik oleh pengguna berumur 20–45 tahun", "Mempunyai profil rasa buah-buahan yang unik dan unggul", "Selamat, bebas sisa racun perosak dan logam berat", "Penerima anugerah kebangsaan Cacao of Excellence 2022"] } },
 
-{ id: "kacipfatimah", cat: "C", n: 3, page: 40, img: "", name: "MCB Cocoa Kacip Fatimah Drink", tags: ["drink", "nosugar"],
+{ id: "kacipfatimah", cat: "C", n: 3, page: 40, img: "kacipfatimah", name: "MCB Cocoa Kacip Fatimah Drink", tags: ["drink", "nosugar"],
   sub: { en: "Dark chocolate 3-in-1 drinking cocoa powder with Kacip Fatimah extract", ms: "Serbuk minuman koko coklat gelap 3-dalam-1 dengan ekstrak Kacip Fatimah" },
   desc: { en: "Kacip Fatimah is one of the most popular ingredients in traditional herbal preparations or jamu for women's health care. The booklet cites past studies on its anti-inflammatory and other properties, its use for blood circulation and menstrual comfort, and trials on osteoporosis and weight reduction. Studies indicate that the addition of Kacip Fatimah extract increases the antioxidant activity in sugar-free dark chocolate beverages to 79.5%, compared to 70.19% in commercial dark chocolate beverages.",
           ms: "Kacip Fatimah ialah antara bahan paling popular dalam ramuan herba tradisional atau jamu untuk penjagaan kesihatan wanita. Buku kecil ini memetik kajian lepas tentang sifat antiradang dan khasiat lain, kegunaannya untuk peredaran darah dan keselesaan haid, serta ujian berkaitan osteoporosis dan penurunan berat badan. Kajian menunjukkan penambahan ekstrak Kacip Fatimah meningkatkan aktiviti antioksidan dalam minuman coklat gelap tanpa gula kepada 79.5%, berbanding 70.19% dalam minuman coklat gelap komersial." },
@@ -248,9 +250,12 @@ var PRODUCTS = [
   pts: { en: ["Milk chocolate containing 15% cocoa provides antioxidants and total phenolic content", "Coconut sugar as a natural alternative sweetener to regular sugar", "Well-received by consumers aged 20–60", "Source of essential vitamins (B, C, and E) and minerals (iron and calcium)", "High in iron", "Contains calcium for healthy bones and teeth"],
          ms: ["Coklat susu dengan 15% koko membekalkan antioksidan dan kandungan fenolik", "Gula kelapa sebagai pemanis alternatif semula jadi kepada gula biasa", "Diterima baik oleh pengguna berumur 20–60 tahun", "Sumber vitamin penting (B, C dan E) dan mineral (zat besi dan kalsium)", "Tinggi zat besi", "Mengandungi kalsium untuk tulang dan gigi yang sihat"] } },
 
-{ id: "icecream", cat: "C", n: 6, page: 46, img: "", name: "MCB Cocoa Ice Creams", tags: [], partial: true,
+{ id: "icecream", cat: "C", n: 6, page: 46, img: "icecream", name: "MCB Cocoa Ice Creams", tags: ["dessert"],
   sub: { en: "Cocoa-based ice cream with 7 different variants", ms: "Aiskrim berasaskan koko dengan 7 varian" },
-  pts: { en: [], ms: [] } },
+  desc: { en: "Cocoa butter-based ice cream is a frozen dessert specially formulated with cocoa butter, which contains healthy fatty acids that do not contribute to increased cholesterol levels and support heart health, along with cocoa powder rich in antioxidants beneficial to overall well-being. This unique combination of ingredients offers an ice cream that is not only delicious but also health-enhancing.",
+          ms: "Aiskrim berasaskan lemak koko ialah pencuci mulut sejuk beku yang diformulasi khas dengan lemak koko, yang mengandungi asid lemak sihat yang tidak menyumbang kepada peningkatan paras kolesterol dan menyokong kesihatan jantung, bersama serbuk koko yang kaya antioksidan untuk kesejahteraan keseluruhan. Gabungan bahan yang unik ini menghasilkan aiskrim yang bukan sahaja lazat tetapi juga menyihatkan." },
+  pts: { en: ["A healthier ice cream option", "Source of healthy fatty acids that do not contribute to increased cholesterol levels and support heart health", "Made from 100% real cocoa powder", "Contains antioxidants beneficial to health", "Smooth, silky, and creamy texture", "Natural color"],
+         ms: ["Pilihan aiskrim yang lebih sihat", "Sumber asid lemak sihat yang tidak menyumbang kepada peningkatan paras kolesterol dan menyokong kesihatan jantung", "Diperbuat daripada 100% serbuk koko asli", "Mengandungi antioksidan yang baik untuk kesihatan", "Tekstur halus, lembut dan berkrim", "Warna semula jadi"] } },
 
 { id: "greencoa", cat: "C", n: 7, page: 47, img: "greencoa", name: "MCB GreenCoa", tags: ["drink", "waste"],
   sub: { en: "Green tea from cocoa leaves", ms: "Teh hijau daripada daun koko" },
@@ -259,15 +264,21 @@ var PRODUCTS = [
   pts: { en: ["Laboratory research reported on activity against breast cancer cells", "Helps regulate blood sugar levels", "Aids in controlling blood cholesterol levels", "Supports weight management", "Rich source of antioxidants", "Leaves are free from chemical use", "Certified Halal by JAKIM"],
          ms: ["Penyelidikan makmal dilaporkan tentang aktiviti terhadap sel kanser payudara", "Membantu mengawal paras gula dalam darah", "Membantu mengawal paras kolesterol darah", "Menyokong pengurusan berat badan", "Sumber antioksidan yang kaya", "Daun bebas penggunaan bahan kimia", "Disahkan Halal oleh JAKIM"] } },
 
-{ id: "flavint", cat: "C", n: 8, page: 48, img: "", name: "MCB FLAVINT", tags: ["extract"], partial: true,
+{ id: "flavint", cat: "C", n: 8, page: 48, img: "flavint", name: "MCB FLAVINT", tags: ["extract", "nosugar"],
   sub: { en: "High anti-oxidant chewable tablet", ms: "Tablet kunyah tinggi antioksidan" },
-  pts: { en: [], ms: [] } },
+  desc: { en: "FLAVINT is a chewable tablet supplement formulated with a pleasant taste and enjoyable texture to support overall health. Enriched with cocoa polyphenol extract and available in various flavors, it functions not only as a breath freshener and mouth deodorizer but is also suitable for all age groups.",
+          ms: "FLAVINT ialah suplemen tablet kunyah yang diformulasi dengan rasa yang enak dan tekstur yang menyenangkan untuk menyokong kesihatan keseluruhan. Diperkaya ekstrak polifenol koko dan terdapat dalam pelbagai perisa, ia bukan sahaja berfungsi sebagai penyegar nafas dan penghilang bau mulut, malah sesuai untuk semua peringkat umur." },
+  pts: { en: ["Sugar-free: ideal for health-conscious individuals as it does not raise blood glycemic index", "Variety of flavors: orange, grape, strawberry, menthol, and more", "Smooth texture: pleasant and easy to chew", "High in antioxidants", "Helps combat free radicals", "Supports cellular protection", "Enhances brain health and focus", "Protects heart health", "Helps regulate blood sugar levels"],
+         ms: ["Tanpa gula: sesuai untuk mereka yang mementingkan kesihatan kerana tidak menaikkan indeks glisemik darah", "Pelbagai perisa: oren, anggur, strawberi, mentol dan lain-lain", "Tekstur halus: enak dan mudah dikunyah", "Tinggi antioksidan", "Membantu melawan radikal bebas", "Menyokong perlindungan sel", "Meningkatkan kesihatan otak dan fokus", "Melindungi kesihatan jantung", "Membantu mengawal paras gula dalam darah"] } },
 
-{ id: "spread", cat: "C", n: 9, page: 49, img: "", name: "MARVELLES Chocolate Spread", tags: ["choc", "nosugar"], partial: true,
+{ id: "spread", cat: "C", n: 9, page: 49, img: "spread", name: "MARVELLES Chocolate Spread", tags: ["choc", "nosugar"],
   sub: { en: "Sugar-free chocolate spread", ms: "Sapuan coklat tanpa gula" },
-  pts: { en: [], ms: [] } },
+  desc: { en: "Chocolate Spread Sugar-free is rich in natural flavor and has a smooth texture, enriched with peanuts, hazelnuts, and almonds. The combination of high-quality cocoa and premium nuts delivers a creamy, rich taste along with a source of protein and healthy fats for sustained energy. With no added sugar, it is suitable for those following a healthy lifestyle, keto diet, or low-carbohydrate diet. A perfect choice for spreading on bread, mixing into smoothies, or enjoying on its own.",
+          ms: "Sapuan Coklat Tanpa Gula kaya dengan rasa semula jadi dan bertekstur halus, diperkaya kacang tanah, hazel dan badam. Gabungan koko berkualiti tinggi dan kekacang premium memberikan rasa berkrim yang kaya serta sumber protein dan lemak sihat untuk tenaga berpanjangan. Tanpa gula tambahan, ia sesuai untuk mereka yang mengamalkan gaya hidup sihat, diet keto atau diet rendah karbohidrat. Pilihan tepat untuk disapu pada roti, dicampur ke dalam smoothie atau dinikmati begitu sahaja." },
+  pts: { en: ["No added sugar: suitable for keto and low-carb diets", "Rich in healthy fats: the blend of cocoa butter, peanuts, hazelnuts, and almonds provides good fats and sustained energy", "Natural source of protein: enhances satiety and supports metabolism", "High in antioxidants and vitamins: cocoa is rich in flavonoids", "Healthy fats and protein help control appetite", "Creamy and satisfying taste: smooth texture with rich cocoa flavor and the aroma of premium nuts"],
+         ms: ["Tanpa gula tambahan: sesuai untuk diet keto dan rendah karbohidrat", "Kaya lemak sihat: gabungan lemak koko, kacang tanah, hazel dan badam membekalkan lemak baik dan tenaga berpanjangan", "Sumber protein semula jadi: menambah rasa kenyang dan menyokong metabolisme", "Tinggi antioksidan dan vitamin: koko kaya flavonoid", "Lemak sihat dan protein membantu mengawal selera", "Rasa berkrim yang memuaskan: tekstur halus dengan rasa koko yang kaya dan aroma kekacang premium"] } },
 
-{ id: "probiotic", cat: "C", n: 10, page: 50, img: "", name: "MARVELLES Probiotic Chocolate", tags: ["choc"],
+{ id: "probiotic", cat: "C", n: 10, page: 50, img: "probiotic", name: "MARVELLES Probiotic Chocolate", tags: ["choc"],
   sub: { en: "Probiotic chocolate", ms: "Coklat probiotik" },
   desc: { en: "Probiotic chocolate is a chocolate formulation that combines beneficial bacteria with prebiotic ingredients to promote the growth of good bacteria and support the gut's essential functions in maintaining its health. In addition, the rich antioxidants in chocolate also contribute to overall health.",
           ms: "Coklat probiotik ialah formulasi coklat yang menggabungkan bakteria baik dengan bahan prebiotik untuk menggalakkan pertumbuhan bakteria baik dan menyokong fungsi penting usus dalam mengekalkan kesihatannya. Antioksidan yang kaya dalam coklat turut menyumbang kepada kesihatan keseluruhan." },
@@ -340,6 +351,8 @@ var QUIZ = [
     q: { en: "How much cocoa is in the milk chocolate of MCB Cocoa Gula Kelapa?", ms: "Berapakah kandungan koko dalam coklat susu MCB Cocoa Gula Kelapa?" } },
   { p: "husk", a: 3, o: ["50%", "75%", "90%", "99.9%"],
     q: { en: "MARVELLES Husk Extract is stated to eliminate what share of acne-causing bacteria?", ms: "Ekstrak Kulit MARVELLES dinyatakan menghapuskan berapa peratus bakteria penyebab jerawat?" } },
+  { p: "icecream", a: 3, o: ["2", "3", "5", "7"],
+    q: { en: "How many variants do MCB Cocoa Ice Creams come in?", ms: "Berapa varian MCB Cocoa Ice Creams?" } },
   { p: "", a: 1, o: ["Kuala Lumpur", "Kota Kinabalu", "Kuching", "Putrajaya"],
     q: { en: "Where is the Malaysian Cocoa Board's head office?", ms: "Di manakah ibu pejabat Lembaga Koko Malaysia?" } },
   { p: "", a: 2, o: ["1957", "1975", "1989", "2004"],
