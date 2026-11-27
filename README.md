@@ -41,7 +41,7 @@ a script or the stylesheet has changed. GitHub Pages takes a minute or two to pu
 | `tools/update-journal.py` | Rebuilds `journal.js` from mcj.koko.gov.my |
 | `app.js` | Screens, navigation, interface text in both languages |
 | `styles.css` | Look and feel |
-| `sw.js` | Offline cache. **Add any new image to its `SHELL` list** |
+| `sw.js` | Offline cache. **Add any new image to its `SHELL` list**. A replaced picture reaches installed copies within a day |
 
 ## Refreshing the journal
 

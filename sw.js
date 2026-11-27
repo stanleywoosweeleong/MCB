@@ -1,15 +1,20 @@
 /* KokoLab — self-updating service worker.
 
    No version number to bump. The app opens instantly from the cache, then the
-   page sends "check": the app files are re-fetched and saved as one set, and
-   if any of them came back different every open window is sent "updated" so
-   it can show its "new version" toast.
+   page sends "check": the app files are re-fetched and, if any differ, the
+   whole new set is staged in a second cache and switched on in one step.
+   Every open window is then sent "updated" so it can show its "new version"
+   toast. Pictures are re-checked once a day.
 
    Adding an image? Add it to SHELL so it is available offline. */
 "use strict";
 
 var CACHE_PREFIX = "kokolab-";      /* unique to THIS app — see activate */
 var CACHE = "kokolab-shell";        /* fixed name; never changes between deploys */
+var NEXT = "kokolab-next";          /* staging area for a new set of app files */
+var READY = "./__ready";            /* written last: marks NEXT complete and live */
+var STAMP = "./__assets-checked";   /* when the pictures were last revalidated */
+var ASSET_MAX_AGE = 24 * 60 * 60 * 1000;
 var INDEX = "./index.html";
 
 var SHELL = [
@@ -80,10 +85,12 @@ function sameBytes(a, b){
 }
 
 /* The page, scripts, stylesheet and manifest are "the app": they must always
-   be saved as one matching set. Images, fonts and icons are best-effort. */
+   be served as one matching set. Images, fonts and icons are independent. */
 var CODE = /\.(html|js|css|webmanifest)$/;
 var CORE = SHELL.filter(function(u){ return CODE.test(u); });
 var ASSETS = SHELL.filter(function(u){ return !CODE.test(u); });
+var CORE_URLS = {};
+CORE.forEach(function(u){ CORE_URLS[new URL(u, self.location.href).href] = u; });
 
 function fetchFresh(url){
   return fetch(url, { cache: "no-cache" }).then(function(res){
@@ -92,44 +99,104 @@ function fetchFresh(url){
   });
 }
 
-/* Fetch every app file past the HTTP cache first; store them only if ALL
-   arrived, so a failed or half-finished download can never leave a mix of old
-   and new files, and a 404/503 can never replace the app. Resolves true when
-   a copy was already saved and any file came back different. Rejects (and
-   changes nothing) if any file could not be fetched. */
-function refreshCore(){
-  return Promise.all(CORE.map(fetchFresh)).then(function(fresh){
-    return caches.open(CACHE).then(function(c){
-      return Promise.all(CORE.map(function(url, i){
-        return c.match(url).then(function(old){
-          return Promise.all([old ? old.arrayBuffer() : null, fresh[i].clone().arrayBuffer()]);
-        }).then(function(b){ return !!b[0] && !sameBytes(b[0], b[1]); });
-      })).then(function(changed){
-        return Promise.all(CORE.map(function(url, i){ return c.put(url, fresh[i]); }))
-          .then(function(){ return changed.some(Boolean); });
+/* Which cache holds the live app files: NEXT once its READY marker exists,
+   otherwise CACHE. That single marker write is what makes an update atomic. */
+function liveCore(){
+  return caches.has(NEXT).then(function(has){
+    if (!has) return CACHE;
+    return caches.open(NEXT).then(function(n){ return n.match(READY); })
+      .then(function(ready){ return ready ? NEXT : CACHE; });
+  });
+}
+
+/* Fold a completed NEXT back into CACHE, then drop NEXT. Until the final
+   delete the app is served from NEXT, so a failure part-way (quota, crash)
+   leaves a complete set live and this simply runs again later. An unfinished
+   NEXT (no marker) is discarded. */
+function promote(){
+  return caches.has(NEXT).then(function(has){
+    if (!has) return;
+    return caches.open(NEXT).then(function(n){
+      return n.match(READY).then(function(ready){
+        if (!ready) return caches.delete(NEXT);
+        return caches.open(CACHE).then(function(c){
+          return Promise.all(CORE.map(function(url){
+            return n.match(url).then(function(res){
+              if (!res) throw new Error("staged copy incomplete: " + url);
+              return c.put(url, res);
+            });
+          }));
+        }).then(function(){ return caches.delete(NEXT); });
       });
     });
   });
 }
 
-/* Images, fonts, icons. onlyMissing skips files already saved; a full pass
-   runs only when a new version of the app has just been stored. */
-function refreshAssets(onlyMissing){
+/* Fetch every app file past the HTTP cache. If nothing differs, write
+   nothing. Otherwise stage the whole new set in NEXT and mark it READY only
+   after every write succeeded; any failure deletes the staging cache and
+   leaves the current app untouched. Resolves true when an existing app was
+   replaced by a different one; rejects if the files could not all be fetched
+   or stored. */
+function refreshCore(){
+  return promote().catch(function(){}).then(function(){
+    return Promise.all(CORE.map(fetchFresh));
+  }).then(function(fresh){
+    return liveCore().then(function(name){ return caches.open(name); }).then(function(live){
+      return Promise.all(CORE.map(function(url, i){
+        return live.match(url).then(function(old){
+          return Promise.all([old ? old.arrayBuffer() : null, fresh[i].clone().arrayBuffer()]);
+        }).then(function(b){ return b[0] ? (sameBytes(b[0], b[1]) ? "same" : "changed") : "new"; });
+      }));
+    }).then(function(state){
+      if (state.every(function(x){ return x === "same"; })) return false;
+      var replaced = state.indexOf("changed") >= 0;
+      return liveCore().then(function(name){
+        /* NEXT is still the live copy (it could not be folded in above): never
+           touch it. Give up for now; the staged app keeps being served. */
+        if (name === NEXT) throw new Error("previous update not yet folded in");
+        return caches.delete(NEXT).then(function(){ return caches.open(NEXT); }).then(function(n){
+          return Promise.all(CORE.map(function(url, i){ return n.put(url, fresh[i]); }))
+            .then(function(){ return n.put(READY, new Response("ok")); });
+        }).then(function(){
+          return promote().catch(function(){});    /* tidy up now if possible; safe to retry later */
+        }, function(err){                          /* staging failed: discard it, keep the current app */
+          return caches.delete(NEXT).then(function(){ throw err; });
+        });
+      }).then(function(){ return replaced; });
+    });
+  });
+}
+
+/* Images, fonts, icons: each is stored on its own (a failure affects only
+   that file). "missing" fetches only what is not saved yet; "all" revalidates
+   every file, so a replaced picture reaches existing installs. */
+function refreshAssets(mode){
   return caches.open(CACHE).then(function(c){
     return Promise.all(ASSETS.map(function(url){
-      return (onlyMissing ? c.match(url) : Promise.resolve(null)).then(function(hit){
+      return (mode === "missing" ? c.match(url) : Promise.resolve(null)).then(function(hit){
         if (hit) return;
         return fetchFresh(url).then(function(res){ return c.put(url, res); });
       }).catch(function(){});
-    }));
+    })).then(function(){
+      if (mode === "all") return c.put(STAMP, new Response(String(Date.now()))).catch(function(){});
+    });
   });
+}
+
+/* A full picture check is due when the app itself just changed, or the last
+   one was more than a day ago. */
+function assetsDue(){
+  return caches.open(CACHE).then(function(c){ return c.match(STAMP); }).then(function(res){
+    return res ? res.text().then(function(t){ return Date.now() - (+t || 0) > ASSET_MAX_AGE; }) : true;
+  }).catch(function(){ return true; });
 }
 
 /* install: save the app (all of it, or the install fails and is retried on
    the next visit), then the pictures; take over at once. Safe because the
-   cache name is stable — a new worker never strands an open page. */
+   cache names are stable — a new worker never strands an open page. */
 self.addEventListener("install", function(e){
-  e.waitUntil(refreshCore().then(function(){ return refreshAssets(true); }).then(function(){ return self.skipWaiting(); }));
+  e.waitUntil(refreshCore().then(function(){ return refreshAssets("missing"); }).then(function(){ return self.skipWaiting(); }));
 });
 
 /* activate: delete only THIS app's other caches (e.g. old versioned ones).
@@ -139,16 +206,17 @@ self.addEventListener("activate", function(e){
   e.waitUntil(
     caches.keys().then(function(keys){
       return Promise.all(keys.map(function(k){
-        return (k.indexOf(CACHE_PREFIX) === 0 && k !== CACHE) ? caches.delete(k) : null;
+        return (k.indexOf(CACHE_PREFIX) === 0 && k !== CACHE && k !== NEXT) ? caches.delete(k) : null;
       }));
     }).then(function(){ return self.clients.claim(); })
   );
 });
 
 /* fetch:
-   - navigations  → the cached app, instantly; network only if nothing is cached
-   - same-origin  → cache first, then network, and cache what comes back
-   - cross-origin → left alone (API calls etc. are the page's business)
+   - navigations and app files → the live saved set, instantly; the network
+     only if nothing is saved (and then nothing is stored piecemeal)
+   - other same-origin files   → cache first, then network, and keep the copy
+   - cross-origin              → left alone
    Freshness is handled by the "check" message, not here. */
 self.addEventListener("fetch", function(e){
   var req = e.request;
@@ -158,31 +226,24 @@ self.addEventListener("fetch", function(e){
   try { url = new URL(req.url); } catch (err) { return; }
   if (url.origin !== self.location.origin) return;
 
-  if (req.mode === "navigate"){
+  var core = req.mode === "navigate" ? INDEX : CORE_URLS[url.origin + url.pathname];
+  if (core){
     e.respondWith(
-      caches.match(INDEX).then(function(hit){
-        if (hit) return hit;
-        return fetch(req).then(function(res){
-          if (res.ok){
-            var copy = res.clone();
-            caches.open(CACHE).then(function(c){ c.put(INDEX, copy); });
-          }
-          return res;
-        });
-      })
+      liveCore().then(function(name){ return caches.open(name); })
+        .then(function(c){ return c.match(core); })
+        .then(function(hit){ return hit || fetch(req); })
     );
     return;
   }
 
   e.respondWith(
-    caches.match(req).then(function(hit){
-      if (hit) return hit;
-      return fetch(req).then(function(res){
-        if (res && res.status === 200 && res.type === "basic"){
-          var copy = res.clone();
-          caches.open(CACHE).then(function(c){ c.put(req, copy); });
-        }
-        return res;
+    caches.open(CACHE).then(function(c){
+      return c.match(req).then(function(hit){
+        if (hit) return hit;
+        return fetch(req).then(function(res){
+          if (res && res.status === 200 && res.type === "basic") c.put(req, res.clone()).catch(function(){});
+          return res;
+        });
       });
     })
   );
@@ -194,7 +255,9 @@ self.addEventListener("message", function(e){
   if (e.data !== "check") return;
   e.waitUntil(
     refreshCore().catch(function(){ return false; }).then(function(changed){
-      return refreshAssets(!changed).then(function(){
+      return (changed ? Promise.resolve(true) : assetsDue()).then(function(due){
+        return refreshAssets(due ? "all" : "missing");
+      }).then(function(){
         if (!changed) return;
         return self.clients.matchAll({ type: "window" }).then(function(list){
           list.forEach(function(c){ c.postMessage("updated"); });

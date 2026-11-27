@@ -127,6 +127,8 @@ def existing_count(path):
 def main():
     cache = sys.argv[sys.argv.index("--cache") + 1] if "--cache" in sys.argv else None
     no_fetch, force = "--no-fetch" in sys.argv, "--force" in sys.argv
+    if cache:
+        os.makedirs(cache, exist_ok=True)
     arts, misses, n = [], 0, 0
     while misses < STOP_AFTER_MISSES:
         n += 1
