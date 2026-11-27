@@ -5,8 +5,8 @@
 var ZH = {
   ui: {
     home: "首页", products: "产品", quiz: "问答", industry: "产业", more: "更多",
-    heroEyebrow: "从实验室到市场", heroTitle: "<em>42</em> 项可可创新，尽在掌中",
-    heroText: "传感器、生物农药、护肤品与巧克力，全部来自马来西亚可可局的研究成果。点一点、搜一搜，把它们全部收集起来。",
+    heroEyebrow: "从实验室到市场", heroTitle: "<span class=\"nb\"><em>42</em> 项可可创新</span><br><span class=\"nb\">尽在掌中</span>",
+    heroText: "<span class=\"nb\">传感器、</span><span class=\"nb\">生物农药、</span><span class=\"nb\">护肤品与巧克力，</span><span class=\"nb\">全部来自</span><span class=\"nb\">马来西亚可可局的</span><span class=\"nb\">研究成果。</span><span class=\"nb\">点一点、</span><span class=\"nb\">搜一搜，</span><span class=\"nb\">把它们全部收集起来。</span>",
     explore: "浏览产品", surprise: "随机看一个",
     passport: "可可护照", passportSub: "已发现 {n} / {t} 项产品", rank: ["幼苗", "采果人", "发酵师", "巧克力大师"],
     cats: "三大系列", items: "{n} 项产品", needs: "您想找什么？",
