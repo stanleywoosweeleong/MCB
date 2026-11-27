@@ -7,7 +7,7 @@ var $$ = function (s, r) { return Array.prototype.slice.call((r || document).que
 function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
 
 /* ── storage (falls back to memory when blocked) ── */
-var mem = {};
+var mem = Object.create(null);
 var store = {
   get: function (k) { try { var v = localStorage.getItem("kokolab." + k); return v === null ? mem[k] : v; } catch (e) { return mem[k]; } },
   set: function (k, v) { mem[k] = v; try { localStorage.setItem("kokolab." + k, v); } catch (e) {} },
@@ -17,7 +17,7 @@ var store = {
 /* ── language ── */
 var LANGS = { en: "en", ms: "ms", zh: "zh-Hans" };
 var LANG = store.get("lang");
-var FIRST_LAUNCH = !LANGS[LANG];
+var FIRST_LAUNCH = !Object.prototype.hasOwnProperty.call(LANGS, LANG);
 if (FIRST_LAUNCH) LANG = "en";
 
 var T = {
@@ -34,8 +34,7 @@ var T = {
     search: "Search products", saved: "Saved", count: "{n} products", none: "Nothing matches. Try a different word or clear the filters.", clear: "Clear filters",
     back: "Back", save: "Save", unsave: "Saved", share: "Share", page: "Booklet p. {n}", highlights: "Highlights", about: "About",
     health: "Benefits are as described in the Malaysian Cocoa Board's booklet. This is general information, not medical advice.",
-    partial: "The page for this product was missing or unreadable in the scanned booklet, so only its name and short description from the contents page are shown.",
-    visit: "Open the portal", getApp: "Get it on Google Play", readPaper: "Read the paper (ResearchGate)", related: "You may also like", prev: "Previous", next: "Next", copied: "Link copied", savedMsg: "Saved", removedMsg: "Removed",
+    visit: "Open the portal", getApp: "Get it on Google Play", close: "Close", rightAns: "Correct answer: {a}", confirmReset: "Clear your discovered products and quiz score?", citeFail: "Could not copy. Select the text instead.", saveFor: "Save: {t}", readPaper: "Read the paper (ResearchGate)", related: "You may also like", prev: "Previous", next: "Next", copied: "Link copied", savedMsg: "Saved", removedMsg: "Removed",
     qStart: "Start", qNext: "Next question", qFinish: "See my score", qRight: "Correct!", qWrong: "Not quite.", qSee: "See the product",
     qDone: ["Keep exploring, the answers are all in the products.", "Good going. A few more products and you'll ace it.", "Excellent. You know your cocoa.", "Perfect score. A true chocolatier!"],
     qAgain: "Play again", qOf: "Question {n} of {t}", yourScore: "Your score",
@@ -47,7 +46,7 @@ var T = {
     cExp: "Cocoa butter leads export earnings", cExpS: "Export value in 2024, RM million",
     table: "View as table", year: "Year", tonnes: "Tonnes", hectares: "Hectares", product: "Product", value: "RM million",
     prices: "Cocoa bean prices", pricesS: "Dry beans, RM per tonne, as listed on {d}. Prices change daily.", region: "Region", bulk: "Bulk", coop: "Cooperative", premium: "Premium",
-    pricesNote: "Premium prices depend on offers, quality and the specific requirements of buyers or chocolate makers.", latest: "Latest prices on koko.gov.my",
+    pricesNote: "Premium prices depend on offers, quality and the specific requirements of buyers or chocolate makers.", latestPrices: "Latest prices on koko.gov.my",
     source: "Source: Malaysian Cocoa Board statistics page (koko.gov.my), read on {d}.",
     mLang: "Language", mLangS: "English", mSaved: "Saved products", mSavedS: "{n} saved", mAbout: "About the Malaysian Cocoa Board", mAboutS: "Vision, mission and history",
     mDir: "Offices and research centres", mDirS: "{n} locations", mSite: "Official website", mSiteS: "koko.gov.my", mInstall: "Install this app", mInstallS: "Add KokoLab to your home screen",
@@ -79,8 +78,7 @@ var T = {
     search: "Cari produk", saved: "Disimpan", count: "{n} produk", none: "Tiada padanan. Cuba perkataan lain atau kosongkan tapisan.", clear: "Kosongkan tapisan",
     back: "Kembali", save: "Simpan", unsave: "Disimpan", share: "Kongsi", page: "Buku kecil ms. {n}", highlights: "Ciri utama", about: "Perihal",
     health: "Manfaat adalah seperti yang dinyatakan dalam buku kecil Lembaga Koko Malaysia. Ini maklumat umum, bukan nasihat perubatan.",
-    partial: "Halaman produk ini tiada atau tidak dapat dibaca dalam imbasan buku kecil, jadi hanya nama dan huraian ringkas daripada halaman kandungan dipaparkan.",
-    visit: "Buka portal", getApp: "Dapatkan di Google Play", readPaper: "Baca kertas kajian (ResearchGate)", related: "Anda mungkin juga suka", prev: "Sebelum", next: "Seterusnya", copied: "Pautan disalin", savedMsg: "Disimpan", removedMsg: "Dibuang",
+    visit: "Buka portal", getApp: "Dapatkan di Google Play", close: "Tutup", rightAns: "Jawapan betul: {a}", confirmReset: "Kosongkan produk ditemui dan markah kuiz anda?", citeFail: "Tidak dapat menyalin. Pilih teks secara manual.", saveFor: "Simpan: {t}", readPaper: "Baca kertas kajian (ResearchGate)", related: "Anda mungkin juga suka", prev: "Sebelum", next: "Seterusnya", copied: "Pautan disalin", savedMsg: "Disimpan", removedMsg: "Dibuang",
     qStart: "Mula", qNext: "Soalan seterusnya", qFinish: "Lihat markah saya", qRight: "Betul!", qWrong: "Kurang tepat.", qSee: "Lihat produk",
     qDone: ["Teruskan meneroka, semua jawapan ada dalam produk.", "Bagus. Teroka beberapa produk lagi untuk markah penuh.", "Cemerlang. Anda memang kenal koko.", "Markah penuh. Chocolatier sejati!"],
     qAgain: "Main lagi", qOf: "Soalan {n} daripada {t}", yourScore: "Markah anda",
@@ -92,7 +90,7 @@ var T = {
     cExp: "Lemak koko menerajui pendapatan eksport", cExpS: "Nilai eksport 2024, RM juta",
     table: "Lihat sebagai jadual", year: "Tahun", tonnes: "Tan", hectares: "Hektar", product: "Produk", value: "RM juta",
     prices: "Harga biji koko", pricesS: "Biji kering, RM setan, seperti disenaraikan pada {d}. Harga berubah setiap hari.", region: "Wilayah", bulk: "Pukal", coop: "Koperasi", premium: "Premium",
-    pricesNote: "Harga premium bergantung pada tawaran, kualiti dan keperluan khusus pembeli atau pengeluar coklat.", latest: "Harga terkini di koko.gov.my",
+    pricesNote: "Harga premium bergantung pada tawaran, kualiti dan keperluan khusus pembeli atau pengeluar coklat.", latestPrices: "Harga terkini di koko.gov.my",
     source: "Sumber: halaman perangkaan Lembaga Koko Malaysia (koko.gov.my), dibaca pada {d}.",
     mLang: "Bahasa", mLangS: "Bahasa Melayu", mSaved: "Produk disimpan", mSavedS: "{n} disimpan", mAbout: "Perihal Lembaga Koko Malaysia", mAboutS: "Wawasan, misi dan sejarah",
     mDir: "Pejabat dan pusat penyelidikan", mDirS: "{n} lokasi", mSite: "Laman web rasmi", mSiteS: "koko.gov.my", mInstall: "Pasang aplikasi ini", mInstallS: "Tambah KokoLab ke skrin utama",
@@ -127,21 +125,21 @@ function fmtDate(iso) {
 }
 
 /* ── state ── */
-var byId = {}; PRODUCTS.forEach(function (p) { byId[p.id] = p; });
+var byId = Object.create(null); PRODUCTS.forEach(function (p) { byId[p.id] = p; });
 var seen = store.list("seen").filter(function (id) { return byId[id]; });
 var favs = store.list("favs").filter(function (id) { return byId[id]; });
 var filt = { cat: "", tag: "", q: "", saved: false };
 
 /* ── journal index ── */
-var ART = (typeof MCJ !== "undefined" ? MCJ : []), artById = {};
+var ART = (typeof MCJ !== "undefined" ? MCJ : []), artById = Object.create(null);
 var TOPIC_RX = {
-  pest: /pod borer|pest|disease|black pod|vsd|dieback|phytophthora|helopeltis|insect|fung|biocontrol|biological control|pathogen|infestation|mirid|rodent|weed/,
+  pest: /pod borer|pest|disease|black pod|vsd|dieback|phytophthora|helopeltis|insect|fung|biocontrol|biological control|pathogen|infestation|mirid|rodent|\bweeds?\b/,
   breed: /clone|clonal|genotyp|genetic|breeding|snp|marker|dna|heritab|germplasm|genom|progeny|hybrid|incompatib|tissue culture|somatic|pollinat/,
-  agro: /soil|fertili|nutrient|planting|agronom|shade|irrigation|seedling|plantlet|biochar|compost|pruning|climate|intercrop|integration|growth promot|biostimulant|rootstock|grafting/,
+  agro: /soil|fertili|nutrient|planting(?! material)|agronom|shade|irrigation|seedling|plantlet|biochar|compost|pruning|climate|intercrop|integration|growth promot|biostimulant|rootstock|grafting/,
   proc: /ferment|drying|roast|chocolate|cocoa butter|cocoa powder|flavou?r|processing|praline|ice cream|texture|sensory|melting|conch|couverture|spray dry|beverage|bean quality/,
   health: /antioxidant|polyphenol|health|skin|cosmetic|nutrition|blood|therapeutic|wound|flavonoid|rats|clinical|anti-|cytotoxic|cancer|obes|diabet|hair|facial/,
   safety: /cadmium|residue|pesticide|heavy metal|contamina|mycotoxin|validation|ochratoxin|hydrocarbon|microbiolog|food safety|regulation|salmonella|colony|detection method|authentic|adulterat/,
-  waste: /pod husk|cocoa shell|bean shell|by-product|waste|pectin|pulp|cocoa leaves|leaf|activated carbon|husk/,
+  waste: /pod husk|cocoa shell|bean shell|by-product|waste|pectin|pulp|\bleaf\b|\bleaves\b|activated carbon|husk/,
   econ: /econom|market|extension|farmer|smallholder|adoption|socio|cost|income|trade|technology transfer|survey|consumer|entrepreneur|price|export|policy|sustainab/
 };
 ART.forEach(function (x) {
@@ -155,7 +153,7 @@ var reads = store.list("reads").filter(function (id) { return artById[id]; });
 var jf = { q: "", y: 0, tp: "", saved: false }, jShown = 30;
 /* which papers sit behind which product (matched on title + keywords) */
 var PRODUCT_RX = {
-  terraprobe: /soil moisture|internet of things|\biot\b/, agrosense: /soil nutrient|internet of things|\biot\b|\bsensors?\b/, atipm: /pod borer/, hyfer: /fertili[sz]er|zeolite/,
+  terraprobe: /soil moisture|internet of things|\biot\b/, agrosense: /soil nutrient|internet of things|\biot\b|\bsensors?\b/, atipm: /pod borer/, hyfer: /\bfertili[sz]ers?\b|zeolite/,
   croped: /pest|disease/, geococoa: /mapping|\bgis\b|spatial/, biocontrol: /biocontrol|biological control|biopesticide|black pod/, biochar: /biochar/,
   cocoamat: /harvesting tool|harvester/, carbon: /activated carbon/, diet: /artificial diet|sterile insect|rearing/, bioaction: /endophytic/,
   bioshield: /biofertili[sz]er|water stress|drought|flood/, kokocorrect: /genotyping|snp|molecular marker|clone identification|fingerprint/, kokoselect: /snp|genomic selection|marker-assisted/,
@@ -163,15 +161,20 @@ var PRODUCT_RX = {
   footcream: /foot|skin crack/, footscrub: /foot|scrub/, shampoo: /shampoo|hair|dandruff/, barshampoo: /shampoo|hair|dandruff/, conditioner: /conditioner|hair/, barconditioner: /conditioner|hair/,
   antidandruff: /dandruff|pectin|hair/, skincare: /skin|cosmetic|acne/, energybar: /energy bar|kelulut|sacha inchi/, singleorigin: /single origin|bean-to-bar|flavou?r profile/,
   kacipfatimah: /kacip fatimah|labisia/, tongkatali: /tongkat ali|eurycoma/, gulakelapa: /coconut sugar|sweetener/, icecream: /ice cream/, greencoa: /cocoa leaves|theobroma cacao leaves|leaf tea/,
-  flavint: /polyphenol|chewable/, spread: /spread/, probiotic: /probiotic/, keto: /sugar[- ]free|keto/, polyphenol: /polyphenol|antioxidant/, husk: /bean shell|cocoa shell|antibacterial|antimicrobial/
+  flavint: /polyphenol|chewable/, spread: /\bspreads?\b/, probiotic: /probiotic/, keto: /sugar[- ]free|keto/, polyphenol: /polyphenol|antioxidant/, husk: /bean shell|cocoa shell|antibacterial|antimicrobial/
 };
-function papersFor(pid) { var rx = PRODUCT_RX[pid]; return rx ? ART.filter(function (x) { return rx.test(x.hay); }).slice(0, 4) : []; }
+function papersFor(pid) {   /* title matches first, then keyword-only matches; newest first within each */
+  var rx = PRODUCT_RX[pid]; if (!rx) return [];
+  var hits = ART.filter(function (x) { return rx.test(x.hay); });
+  var inTitle = hits.filter(function (x) { return rx.test(x.t.toLowerCase()); });
+  return inTitle.concat(hits.filter(function (x) { return inTitle.indexOf(x) < 0; })).slice(0, 4);
+}
 function productsFor(x) { return PRODUCTS.filter(function (p) { return PRODUCT_RX[p.id] && p.id !== "croped" && PRODUCT_RX[p.id].test(x.hay); }).slice(0, 6); }
 function volLabel(x) { return t("vol", { v: x.v + (x.i ? "(" + x.i + ")" : "") }) + " · " + x.y; }
 function arow(x) {
   var on = reads.indexOf(x.id) >= 0;
   return '<article class="card arow"><a href="#/a/' + x.id + '"><span class="pill">' + volLabel(x) + "</span><h3>" + esc(x.t) + "</h3><p>" + esc(x.a) + "</p></a>" +
-    '<button class="fav" type="button" data-read="' + x.id + '" aria-pressed="' + on + '" aria-label="' + esc(t("jSaved")) + '">' + I.mark + "</button></article>";
+    '<button class="fav" type="button" data-read="' + x.id + '" aria-pressed="' + on + '" aria-label="' + esc(t("saveFor", { t: x.t })) + '">' + I.mark + "</button></article>";
 }
 function jMatches(x) {
   if (jf.y && x.y !== jf.y) return false;
@@ -202,6 +205,15 @@ function vJournal() {
     '<div class="rowscroll" id="jyears">' + jYearsHtml() + '</div><div class="rowscroll" id="jchips">' + jChipsHtml() + '</div></div><div id="jlist">' + jListHtml() + '</div><p class="note sect">' + t("jNote") + '</p><p style="margin-top:14px"><a class="btn soft" href="https://mcj.koko.gov.my/" target="_blank" rel="noopener">' + I.link + "mcj.koko.gov.my</a></p>";
 }
 function jRefresh() { $("#jlist").innerHTML = jListHtml(); $("#jyears").innerHTML = jYearsHtml(); $("#jchips").innerHTML = jChipsHtml(); }
+function copyText(text, okMsg) {
+  var legacy = function () {
+    var ta = document.createElement("textarea"); ta.value = text; ta.setAttribute("readonly", ""); ta.style.cssText = "position:fixed;top:0;left:0;opacity:0";
+    document.body.appendChild(ta); ta.select(); var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) {}
+    document.body.removeChild(ta); snack(ok ? okMsg : t("citeFail"));
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { snack(okMsg); }, legacy); else legacy();
+}
 function citation(x) { return x.a + " (" + x.y + "). " + x.t + ". Malaysian Cocoa Journal, " + x.v + (x.i ? "(" + x.i + ")" : "") + ". https://mcj.koko.gov.my/ArticleDetail.aspx?ID=" + x.id; }
 function vArticle(id) {
   var x = artById[id];
@@ -224,7 +236,7 @@ function vArticle(id) {
     (rel.length ? '<section class="sect"><h2>' + t("jRelated") + '</h2><div class="list">' + rel.map(arow).join("") + "</div></section>" : "");
 }
 var scrolls = {};
-var lastRoute = "";
+var lastRoute = "", started = false;
 var deferredInstall = null;
 
 /* ── icons ── */
@@ -258,7 +270,7 @@ function thumb(p, cls) {
 }
 function card(p) {
   var fav = favs.indexOf(p.id) >= 0;
-  return '<article class="card pcard cat-' + p.cat + '"><a href="#/p/' + p.id + '" style="display:contents;text-decoration:none">' + thumb(p) +
+  return '<article class="card pcard cat-' + p.cat + '"><a href="#/p/' + p.id + '">' + thumb(p) +
     '<div class="body"><span class="pill">' + esc(L(CATS[p.cat])) + "</span><h3>" + esc(p.name) + "</h3><p>" + esc(L(p.sub)) + "</p></div></a>" +
     (seen.indexOf(p.id) >= 0 ? '<span class="seen" aria-hidden="true">✓</span>' : "") +
     '<button class="fav" type="button" data-fav="' + p.id + '" aria-pressed="' + fav + '" aria-label="' + esc(t("save")) + ": " + esc(p.name) + '">' + I.heart + "</button></article>";
@@ -328,7 +340,9 @@ function matches(p) {
   if (filt.tag && p.tags.indexOf(filt.tag) < 0) return false;
   if (filt.saved && favs.indexOf(p.id) < 0) return false;
   if (filt.q) {
-    var hay = (p.name + " " + L(p.sub) + " " + L(p.desc) + " " + (p.pts[LANG] || []).join(" ") + " " + L(CATS[p.cat])).toLowerCase();
+    var hay = p.hay || (p.hay = [p.name].concat(["en", "ms", "zh"].map(function (l) {
+      return [p.sub[l], p.desc && p.desc[l], (p.pts[l] || []).join(" "), CATS[p.cat][l]].join(" ");
+    })).join(" ").toLowerCase());
     return filt.q.toLowerCase().split(/\s+/).every(function (w) { return hay.indexOf(w) >= 0; });
   }
   return true;
@@ -372,8 +386,7 @@ function vDetail(id) {
     (p.link ? '<a class="btn soft" href="' + p.link + '" target="_blank" rel="noopener">' + I.link + t(p.linkApp ? "getApp" : p.linkPaper ? "readPaper" : "visit") + "</a>" : "") + "</div>" +
     (p.desc ? '<p class="desc">' + esc(L(p.desc)) + "</p>" : "") +
     (pts.length ? "<h2>" + t("highlights") + '</h2><ul class="pts">' + pts.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>" : "") +
-    (p.partial ? '<p class="note">' + t("partial") + "</p>" : "") +
-    (p.cat !== "A" && !p.partial ? '<p class="note">' + t("health") + "</p>" : "") +
+    (p.cat !== "A" ? '<p class="note">' + t("health") + "</p>" : "") +
     '<p class="eyebrow" style="margin-top:16px">' + t("page", { n: p.page }) + "</p></div></article>" +
     (function () { var ps = papersFor(id); return ps.length ? '<section class="sect"><h2>' + t("research") + '</h2><p class="lead" style="margin:-6px 0 12px;color:var(--muted)">' + t("researchS") + '</p><div class="list">' + ps.map(arow).join("") + "</div></section>" : ""; })() +
     (rel.length ? '<section class="sect"><h2>' + t("related") + '</h2><div class="hscroll">' + rel.map(card).join("") + "</div></section>" : "") +
@@ -401,7 +414,7 @@ function vQuiz() {
       return '<i class="' + (k < qz.res.length ? (qz.res[k] ? "ok" : "no") : k === qz.i ? "now" : "") + '"></i>';
     }).join("") + '</div><p class="qtext">' + esc(L(q.q)) + '</p><div class="opts">' + opts.map(function (o, k) {
       var cls = done ? (k === q.a ? "ok" : k === qz.picked ? "no" : "") : "";
-      return '<button type="button" data-opt="' + k + '" class="' + cls + '"' + (done ? " disabled" : "") + "><span>" + "ABCD"[k] + "</span>" + esc(o) + "</button>";
+      return '<button type="button" data-opt="' + k + '" class="' + cls + '"' + (done ? " disabled" : "") + "><span>" + "ABCD"[k] + "</span>" + esc(o) + (done && k === q.a ? '<span class="sr"> ✓</span>' : "") + "</button>";
     }).join("") + '</div><div class="qfoot" aria-live="polite">' + (done ?
       "<b style=\"color:var(--" + (qz.picked === q.a ? "good" : "bad") + ')">' + t(qz.picked === q.a ? "qRight" : "qWrong") + "</b>" +
       '<span style="display:flex;gap:8px;flex-wrap:wrap">' + (q.p ? '<a class="btn soft" href="#/p/' + q.p + '">' + t("qSee") + "</a>" : "") +
@@ -443,18 +456,18 @@ function wireCharts() {
       var px = 8 + (best[0] - x0) / (x1 - x0) * 320;
       cross.setAttribute("x1", px); cross.setAttribute("x2", px); cross.setAttribute("visibility", "visible");
       tip.hidden = false; tip.textContent = best[0] + " · " + num(best[1]);
-      var left = svg.offsetLeft + px / 340 * box.width;
-      tip.style.left = Math.max(60, Math.min(el.clientWidth - 60, left)) + "px"; tip.style.top = (svg.offsetTop + 14) + "px";
+      var host = el.getBoundingClientRect(), left = box.left - host.left + px / 340 * box.width;
+      tip.style.left = Math.max(60, Math.min(el.clientWidth - 60, left)) + "px"; tip.style.top = (box.top - host.top + 38) + "px";
     }
     function out() { cross.setAttribute("visibility", "hidden"); tip.hidden = true; }
-    svg.addEventListener("pointermove", move); svg.addEventListener("pointerdown", move); svg.addEventListener("pointerleave", out);
+    svg.addEventListener("pointermove", move); svg.addEventListener("pointerdown", move); svg.addEventListener("pointerleave", function (e) { if (e.pointerType !== "touch") out(); });
   });
 }
 function vIndustry() {
   var ex = STATS.exports, mx = ex[0].v, rm = function (v) { return num(Math.round(v / 1000)); };
   var pr = function (v) { return num(v); };
   return '<div class="page"><h1>' + t("indTitle") + '</h1><p class="lead">' + t("indLead") + "</p>" +
-    '<div class="tiles sect">' + [["294,697", "tGrind"], ["268", "tProd"], ["6,580", "tArea"], ["86%", "tSmall"], ["RM15.1b", "tExp"]].map(function (x) {
+    '<div class="tiles sect">' + [["294,697", "tGrind"], ["268", "tProd"], ["6,580", "tArea"], [Math.round(STATS.area2025.small / (STATS.area2025.small + STATS.area2025.estate) * 100) + "%", "tSmall"], ["RM15.1b", "tExp"]].map(function (x) {
       return '<div class="card tile"><div class="v">' + x[0] + '</div><div class="l">' + t(x[1]) + "</div></div>";
     }).join("") + "</div>" +
     '<div class="charts sect">' + lineChart("production", STATS.production, "cProd", "cProdS", "tonnes") + lineChart("grindings", STATS.grindings, "cGrind", "cGrindS", "tonnes") +
@@ -467,7 +480,7 @@ function vIndustry() {
     '<section class="sect"><h2>' + t("prices") + '</h2><div class="card chart"><p class="cs">' + t("pricesS", { d: fmtDate(STATS.priceDate) }) + '</p><div class="tablewrap"><table>' +
       "<tr><th>" + t("region") + "</th><th>" + t("bulk") + " SMC1</th><th>" + t("bulk") + " SMC2</th><th>" + t("coop") + " SMC1</th><th>" + t("coop") + " SMC2</th><th>" + t("premium") + "</th></tr>" +
       STATS.prices.map(function (p) { return "<tr><td>" + esc(L(p.r)) + "</td><td>" + pr(p.b1) + "</td><td>" + pr(p.b2) + "</td><td>" + pr(p.k1) + "</td><td>" + pr(p.k2) + "</td><td>" + p.prem + "</td></tr>"; }).join("") +
-      '</table></div><p class="cs" style="margin-top:10px">' + t("pricesNote") + '</p><a class="btn soft" href="https://www.koko.gov.my/doc/perangkaan/" target="_blank" rel="noopener">' + I.link + t("latest") + "</a></div></section>" +
+      '</table></div><p class="cs" style="margin-top:10px">' + t("pricesNote") + '</p><a class="btn soft" href="https://www.koko.gov.my/doc/perangkaan/" target="_blank" rel="noopener">' + I.link + t("latestPrices") + "</a></div></section>" +
     '<p class="note sect">' + t("source", { d: fmtDate(STATS.read) }) + "</p></div>";
 }
 
@@ -536,7 +549,12 @@ function render(keepScroll) {
     return '<a href="#/' + x[0] + '"' + (x[0] === tab ? ' aria-current="page"' : "") + ">" + I[x[1]] + "<span>" + t(x[1]) + "</span></a>";
   }).join("");
   if (r === "industry") wireCharts();
-  if (!keepScroll) window.scrollTo(0, (r === "products" && scrolls.products) || (r === "journal" && scrolls.journal) || 0);
+  if (!keepScroll) {
+    /* restore a list's position only when coming straight back from one of its detail pages */
+    var back = (r === "products" && lastRoute.indexOf("p/") === 0 && scrolls.products) || (r === "journal" && lastRoute.indexOf("a/") === 0 && scrolls.journal) || 0;
+    window.scrollTo(0, back);
+    if (started) $("#view").focus({ preventScroll: true });
+  }
   lastRoute = r;
 }
 function applyLang() {
@@ -547,34 +565,54 @@ function applyLang() {
   render(true);
 }
 function setLang(l) {
-  if (!LANGS[l]) return false;
+  if (!Object.prototype.hasOwnProperty.call(LANGS, l)) return false;
   var changed = l !== LANG;
   LANG = l; store.set("lang", LANG);
   if (changed) applyLang();
   return true;
 }
+var pickOpener = null;
 function showLangPick(on) {
+  if (on) pickOpener = document.activeElement;
   $("#langpick").hidden = !on;
+  $("#lpclose").hidden = FIRST_LAUNCH;            /* first launch: a language must be chosen */
+  $("#lpclose").setAttribute("aria-label", t("close"));
   document.body.classList.toggle("picking", on);
-  [$("#top"), $("#view"), $("#tabs")].forEach(function (n) { n.inert = on; });
+  [$("#top"), $("#view"), $("#tabs"), $("#toast"), $("#snack")].forEach(function (n) { n.inert = on; });
   if (on) $("#langpick").focus();
+  else if (pickOpener && document.contains(pickOpener)) pickOpener.focus({ preventScroll: true });
+  else $("#langbtn").focus({ preventScroll: true });
 }
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape" && !$("#langpick").hidden && !FIRST_LAUNCH) showLangPick(false);
+});
+document.addEventListener("pointerdown", function (e) {      /* touch: a chart label stays until the next tap elsewhere */
+  if (e.target.closest && e.target.closest("[data-chart] svg")) return;
+  $$("[data-chart] .tip").forEach(function (n) { n.hidden = true; });
+  $$("[data-chart] .cross").forEach(function (n) { n.setAttribute("visibility", "hidden"); });
+});
+function announce(msg) { var n = $("#live"); n.textContent = ""; setTimeout(function () { n.textContent = msg; }, 60); }
 
 /* ── events ── */
 window.addEventListener("hashchange", function () {
-  if (lastRoute === "products") scrolls.products = window.scrollY;
-  if (lastRoute === "journal") scrolls.journal = window.scrollY;
+  /* remember a list's position only when a detail page is opened from that list */
+  var nr = route();
+  if (nr.indexOf("p/") === 0 && lastRoute.indexOf("p/") !== 0) scrolls.products = lastRoute === "products" ? window.scrollY : 0;
+  if (nr.indexOf("a/") === 0 && lastRoute.indexOf("a/") !== 0) scrolls.journal = lastRoute === "journal" ? window.scrollY : 0;
   if (route() !== "quiz" && route().indexOf("p/") !== 0) qz = null;
   render();
 });
 $("#langbtn").onclick = function () { showLangPick(true); };
 $("#langpick").onclick = function (e) {
-  if (setLang(e.target.getAttribute("data-lang"))) { showLangPick(false); if (FIRST_LAUNCH) { FIRST_LAUNCH = false; window.scrollTo(0, 0); } }
+  if (e.target.id === "lpclose") { showLangPick(false); return; }
+  if (setLang(e.target.getAttribute("data-lang"))) { var first = FIRST_LAUNCH; FIRST_LAUNCH = false; showLangPick(false); if (first) window.scrollTo(0, 0); }
 };
 $("#tabs").addEventListener("click", function (e) {
   var a = e.target.closest("a");
-  if (a && a.getAttribute("href") === "#/products") scrolls.products = 0;
-  if (a && a.getAttribute("href") === "#/journal") scrolls.journal = 0;
+  /* a tab tap starts that section afresh */
+  if (a && a.getAttribute("href") === "#/products") { scrolls.products = 0; filt = { cat: "", tag: "", q: "", saved: false }; }
+  if (a && a.getAttribute("href") === "#/journal") { scrolls.journal = 0; jf = { q: "", y: 0, tp: "", saved: false }; jShown = 30; }
+  if (a && a.getAttribute("aria-current") && "#/" + route() === a.getAttribute("href")) render();
 });
 
 document.addEventListener("click", function (e) {
@@ -602,13 +640,13 @@ document.addEventListener("click", function (e) {
   if ("readslink" in d) { jf = { q: "", y: 0, tp: "", saved: true }; jShown = 30; scrolls.journal = 0; return; }
   if (el.id === "acite") {
     var cx = artById[+route().split("/")[1]];
-    if (navigator.clipboard) navigator.clipboard.writeText(citation(cx)).then(function () { snack(t("cited")); }, function () {});
+    copyText(citation(cx), t("cited"));
     return;
   }
   if (el.id === "ashare") {
     var sx = artById[+route().split("/")[1]], sd = { title: sx.t, text: sx.t + " (Malaysian Cocoa Journal, " + sx.y + ")", url: location.href };
     if (navigator.share) navigator.share(sd).catch(function () {});
-    else if (navigator.clipboard) navigator.clipboard.writeText(sd.url).then(function () { snack(t("copied")); }, function () {});
+    else copyText(sd.url, t("copied"));
     return;
   }
   if ("cat" in d) { filt = { cat: d.cat, tag: "", q: "", saved: false }; scrolls.products = 0; return; }
@@ -616,7 +654,7 @@ document.addEventListener("click", function (e) {
   if ("savedlink" in d) { filt = { cat: "", tag: "", q: "", saved: true }; scrolls.products = 0; return; }
   if ("reset" in d) { filt = { cat: "", tag: "", q: "", saved: false }; scrolls.products = 0; return; }
   if ("surprise" in d) {
-    var pool = PRODUCTS.filter(function (p) { return seen.indexOf(p.id) < 0 && !p.partial; });
+    var pool = PRODUCTS.filter(function (p) { return seen.indexOf(p.id) < 0; });
     if (!pool.length) pool = PRODUCTS;
     location.hash = "#/p/" + pool[Math.floor(Math.random() * pool.length)].id; return;
   }
@@ -628,6 +666,8 @@ document.addEventListener("click", function (e) {
   if ("opt" in d) {
     if (qz.picked !== null) return;
     qz.picked = +d.opt; qz.res.push(qz.picked === qz.qs[qz.i].a); render(true);
+    var qq = qz.qs[qz.i], qo = Array.isArray(qq.o) ? qq.o : L(qq.o);
+    announce(qz.picked === qq.a ? t("qRight") : t("qWrong") + " " + t("rightAns", { a: qo[qq.a] }));
     var nx = $("[data-qnext]"); if (nx) nx.focus({ preventScroll: true });
     return;
   }
@@ -638,7 +678,7 @@ document.addEventListener("click", function (e) {
   }
   if ("langpick" in d) { showLangPick(true); return; }
   if ("install" in d) { if (deferredInstall) { deferredInstall.prompt(); deferredInstall = null; render(true); } return; }
-  if ("resetpass" in d) { seen = []; store.set("seen", "[]"); store.set("best", "0"); snack(t("resetDone")); return; }
+  if ("resetpass" in d) { if (!window.confirm(t("confirmReset"))) return; seen = []; store.set("seen", "[]"); store.set("best", "0"); snack(t("resetDone")); return; }
   if (el.id === "dfav") {
     var on = toggleFav(route().split("/")[1]);
     el.setAttribute("aria-pressed", on); el.classList.toggle("soft", !on); $("span", el).textContent = t(on ? "unsave" : "save"); return;
@@ -646,7 +686,7 @@ document.addEventListener("click", function (e) {
   if (el.id === "dshare") {
     var p = byId[route().split("/")[1]], data = { title: p.name + " · KokoLab", text: p.name + ": " + L(p.sub), url: location.href };
     if (navigator.share) navigator.share(data).catch(function () {});
-    else if (navigator.clipboard) navigator.clipboard.writeText(data.url).then(function () { snack(t("copied")); }, function () {});
+    else copyText(data.url, t("copied"));
   }
 });
 document.addEventListener("input", function (e) {
@@ -656,7 +696,10 @@ document.addEventListener("input", function (e) {
 window.addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); deferredInstall = e; if (route() === "more") render(true); });
 
 /* ── start ── */
+function measure() { document.documentElement.style.setProperty("--top-h", $("#top").offsetHeight + "px"); }
+measure(); window.addEventListener("resize", measure);
 applyLang();
+started = true;
 if (FIRST_LAUNCH) showLangPick(true);
 
 /* ── service worker: instant launch, then check for a newer copy ── */

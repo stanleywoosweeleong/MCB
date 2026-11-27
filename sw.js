@@ -1,9 +1,9 @@
 /* KokoLab — self-updating service worker.
 
    No version number to bump. The app opens instantly from the cache, then the
-   page sends "check": every shell file is re-fetched, the cache is refreshed,
-   and if the page, a script or the stylesheet came back different every open
-   window is sent "updated" so it can show its "new version" toast.
+   page sends "check": the app files are re-fetched and saved as one set, and
+   if any of them came back different every open window is sent "updated" so
+   it can show its "new version" toast.
 
    Adding an image? Add it to SHELL so it is available offline. */
 "use strict";
@@ -79,39 +79,57 @@ function sameBytes(a, b){
   return true;
 }
 
-/* Fetch one file past the HTTP cache and store it. Resolves true only when a
-   copy was already cached and the new one differs. Errors and non-200
-   responses leave the cache alone, so a 404/503 can never replace the app. */
-function refresh(url){
+/* The page, scripts, stylesheet and manifest are "the app": they must always
+   be saved as one matching set. Images, fonts and icons are best-effort. */
+var CODE = /\.(html|js|css|webmanifest)$/;
+var CORE = SHELL.filter(function(u){ return CODE.test(u); });
+var ASSETS = SHELL.filter(function(u){ return !CODE.test(u); });
+
+function fetchFresh(url){
   return fetch(url, { cache: "no-cache" }).then(function(res){
-    if (!res || !res.ok) return false;
-    return caches.open(CACHE).then(function(c){
-      return c.match(url).then(function(old){
-        return Promise.all([
-          old ? old.arrayBuffer() : null,
-          res.clone().arrayBuffer()
-        ]).then(function(b){
-          var changed = !!b[0] && !sameBytes(b[0], b[1]);
-          return c.put(url, res).then(function(){ return changed; });
-        });
-      });
-    });
-  }).catch(function(){ return false; });
-}
-
-/* index.html, scripts and styles together are "the app". */
-var CODE = /\.(html|js|css)$/;
-
-function refreshShell(){
-  return Promise.all(SHELL.map(refresh)).then(function(changed){
-    return SHELL.some(function(url, i){ return changed[i] && CODE.test(url); });
+    if (!res || !res.ok) throw new Error(url + " " + (res && res.status));
+    return res;
   });
 }
 
-/* install: precache, then take over at once. Safe because the cache name is
-   stable — a new worker never strands an open page on a deleted cache. */
+/* Fetch every app file past the HTTP cache first; store them only if ALL
+   arrived, so a failed or half-finished download can never leave a mix of old
+   and new files, and a 404/503 can never replace the app. Resolves true when
+   a copy was already saved and any file came back different. Rejects (and
+   changes nothing) if any file could not be fetched. */
+function refreshCore(){
+  return Promise.all(CORE.map(fetchFresh)).then(function(fresh){
+    return caches.open(CACHE).then(function(c){
+      return Promise.all(CORE.map(function(url, i){
+        return c.match(url).then(function(old){
+          return Promise.all([old ? old.arrayBuffer() : null, fresh[i].clone().arrayBuffer()]);
+        }).then(function(b){ return !!b[0] && !sameBytes(b[0], b[1]); });
+      })).then(function(changed){
+        return Promise.all(CORE.map(function(url, i){ return c.put(url, fresh[i]); }))
+          .then(function(){ return changed.some(Boolean); });
+      });
+    });
+  });
+}
+
+/* Images, fonts, icons. onlyMissing skips files already saved; a full pass
+   runs only when a new version of the app has just been stored. */
+function refreshAssets(onlyMissing){
+  return caches.open(CACHE).then(function(c){
+    return Promise.all(ASSETS.map(function(url){
+      return (onlyMissing ? c.match(url) : Promise.resolve(null)).then(function(hit){
+        if (hit) return;
+        return fetchFresh(url).then(function(res){ return c.put(url, res); });
+      }).catch(function(){});
+    }));
+  });
+}
+
+/* install: save the app (all of it, or the install fails and is retried on
+   the next visit), then the pictures; take over at once. Safe because the
+   cache name is stable — a new worker never strands an open page. */
 self.addEventListener("install", function(e){
-  e.waitUntil(refreshShell().then(function(){ return self.skipWaiting(); }));
+  e.waitUntil(refreshCore().then(function(){ return refreshAssets(true); }).then(function(){ return self.skipWaiting(); }));
 });
 
 /* activate: delete only THIS app's other caches (e.g. old versioned ones).
@@ -170,15 +188,17 @@ self.addEventListener("fetch", function(e){
   );
 });
 
-/* "check" from a page: refresh the shell and, if index.html changed, tell
-   every open window so each can offer a reload. */
+/* "check" from a page: refresh the app and, if it changed, tell every open
+   window so each can offer a reload. */
 self.addEventListener("message", function(e){
   if (e.data !== "check") return;
   e.waitUntil(
-    refreshShell().then(function(changed){
-      if (!changed) return;
-      return self.clients.matchAll({ type: "window" }).then(function(list){
-        list.forEach(function(c){ c.postMessage("updated"); });
+    refreshCore().catch(function(){ return false; }).then(function(changed){
+      return refreshAssets(!changed).then(function(){
+        if (!changed) return;
+        return self.clients.matchAll({ type: "window" }).then(function(list){
+          list.forEach(function(c){ c.postMessage("updated"); });
+        });
       });
     })
   );

@@ -47,6 +47,8 @@ a script or the stylesheet has changed. GitHub Pages takes a minute or two to pu
 
 When a new volume is published, run `python3 tools/update-journal.py` and push. It reads every article page on
 mcj.koko.gov.my (slowly, to be gentle on the server) and rewrites `journal.js`. No PDFs are copied.
+If any page cannot be downloaded the tool stops and leaves `journal.js` untouched, and it refuses to write a result
+with fewer papers than before unless you add `--force`.
 
 ## Content notes
 
