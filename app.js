@@ -55,7 +55,14 @@ var T = {
     aboutTitle: "Malaysian Cocoa Board", aboutLead: "Lembaga Koko Malaysia (LKM) is a federal statutory body under the Ministry of Plantation and Commodities, headquartered in Kota Kinabalu, Sabah.",
     vision: "Vision", mission: "Mission", functions: "What the Board does", history: "Milestones", unofficial: "Unofficial translation of the Malay original",
     dirTitle: "Offices & centres", dirLead: "Tap to call or open a location in your maps app. Names are shown as listed by the Board.", call: "Call", map: "Map", hq: "Head office", rd: "Research", unit: "Unit office",
-    appNote: "KokoLab is an unofficial companion app. Product content and photos come from the Malaysian Cocoa Board's booklet \"From Lab to Market: R&D Products and Technologies\"; figures come from koko.gov.my. For official information, contact the Board.",
+    appNote: "KokoLab is an unofficial companion app. Product content and photos come from the Malaysian Cocoa Board's booklet \"From Lab to Market: R&D Products and Technologies\"; figures come from koko.gov.my and the journal index from mcj.koko.gov.my. For official information, contact the Board.",
+    journal: "Journal", jTitle: "Malaysian Cocoa Journal", jLead: "{n} research papers from Volume {v0} ({y0}) to Volume {v1} ({y1}). Abstracts work offline; full papers open on mcj.koko.gov.my.",
+    jSearch: "Search titles, authors, keywords", jCount: "{n} papers", jAllYears: "All years", jMore: "Show more", jSaved: "Reading list", jNone: "No papers match. Try a different word or clear the filters.",
+    vol: "Vol. {v}", abstract: "Abstract", keywords: "Keywords", readPdf: "Read full paper (PDF)", cite: "Copy citation", cited: "Citation copied", jPage: "Journal page", jRelated: "Related papers",
+    jProducts: "From lab to market", jProductsS: "MCB products connected to this research", research: "Research behind this", researchS: "Papers from the Malaysian Cocoa Journal on related work",
+    latest: "Latest research", jNote: "Abstracts and papers are the copyright of the Malaysian Cocoa Journal and their authors. Full papers need an internet connection.", jEnOnly: "",
+    topics: { pest: "Pests & diseases", breed: "Breeding & genetics", agro: "Soil & agronomy", proc: "Processing & chocolate", health: "Health & personal care", safety: "Safety & analysis", waste: "By-products", econ: "Economics & extension" },
+    mInd: "Cocoa in numbers", mIndS: "Production, grindings, exports and prices", mReads: "Reading list", mReadsS: "{n} papers saved",
     version: "This copy: {d}", newVer: "A new version is ready", refresh: "Refresh"
   },
   ms: {
@@ -92,7 +99,14 @@ var T = {
     aboutTitle: "Lembaga Koko Malaysia", aboutLead: "Lembaga Koko Malaysia (LKM) ialah badan berkanun persekutuan di bawah Kementerian Perladangan dan Komoditi, beribu pejabat di Kota Kinabalu, Sabah.",
     vision: "Wawasan", mission: "Misi", functions: "Fungsi LKM", history: "Detik penting", unofficial: "",
     dirTitle: "Pejabat & pusat", dirLead: "Tekan untuk menelefon atau membuka lokasi dalam aplikasi peta anda.", call: "Telefon", map: "Peta", hq: "Ibu pejabat", rd: "Penyelidikan", unit: "Pejabat unit",
-    appNote: "KokoLab ialah aplikasi pendamping tidak rasmi. Kandungan dan gambar produk diambil daripada buku kecil Lembaga Koko Malaysia \"From Lab to Market: R&D Products and Technologies\"; angka daripada koko.gov.my. Terjemahan Bahasa Melayu adalah tidak rasmi. Untuk maklumat rasmi, hubungi LKM.",
+    appNote: "KokoLab ialah aplikasi pendamping tidak rasmi. Kandungan dan gambar produk diambil daripada buku kecil Lembaga Koko Malaysia \"From Lab to Market: R&D Products and Technologies\"; angka daripada koko.gov.my dan indeks jurnal daripada mcj.koko.gov.my. Terjemahan Bahasa Melayu adalah tidak rasmi. Untuk maklumat rasmi, hubungi LKM.",
+    journal: "Jurnal", jTitle: "Malaysian Cocoa Journal", jLead: "{n} kertas penyelidikan dari Jilid {v0} ({y0}) hingga Jilid {v1} ({y1}). Abstrak boleh dibaca luar talian; kertas penuh dibuka di mcj.koko.gov.my.",
+    jSearch: "Cari tajuk, penulis, kata kunci", jCount: "{n} kertas", jAllYears: "Semua tahun", jMore: "Papar lagi", jSaved: "Senarai bacaan", jNone: "Tiada kertas yang sepadan. Cuba perkataan lain atau kosongkan tapisan.",
+    vol: "Jil. {v}", abstract: "Abstrak", keywords: "Kata kunci", readPdf: "Baca kertas penuh (PDF)", cite: "Salin sitasi", cited: "Sitasi disalin", jPage: "Halaman jurnal", jRelated: "Kertas berkaitan",
+    jProducts: "Dari makmal ke pasaran", jProductsS: "Produk LKM yang berkaitan dengan penyelidikan ini", research: "Penyelidikan di sebaliknya", researchS: "Kertas daripada Malaysian Cocoa Journal tentang kerja berkaitan",
+    latest: "Penyelidikan terkini", jNote: "Abstrak dan kertas ialah hak cipta Malaysian Cocoa Journal dan penulisnya. Kertas penuh memerlukan sambungan internet.", jEnOnly: "Jurnal ini diterbitkan dalam Bahasa Inggeris.",
+    topics: { pest: "Perosak & penyakit", breed: "Pembiakbakaan & genetik", agro: "Tanah & agronomi", proc: "Pemprosesan & coklat", health: "Kesihatan & penjagaan diri", safety: "Keselamatan & analisis", waste: "Hasil sampingan", econ: "Ekonomi & pengembangan" },
+    mInd: "Koko dalam angka", mIndS: "Pengeluaran, pengisaran, eksport dan harga", mReads: "Senarai bacaan", mReadsS: "{n} kertas disimpan",
     version: "Salinan ini: {d}", newVer: "Versi baharu sudah sedia", refresh: "Muat semula"
   }
 };
@@ -113,6 +127,98 @@ var byId = {}; PRODUCTS.forEach(function (p) { byId[p.id] = p; });
 var seen = store.list("seen").filter(function (id) { return byId[id]; });
 var favs = store.list("favs").filter(function (id) { return byId[id]; });
 var filt = { cat: "", tag: "", q: "", saved: false };
+
+/* ── journal index ── */
+var ART = (typeof MCJ !== "undefined" ? MCJ : []), artById = {};
+var TOPIC_RX = {
+  pest: /pod borer|pest|disease|black pod|vsd|dieback|phytophthora|helopeltis|insect|fung|biocontrol|biological control|pathogen|infestation|mirid|rodent|weed/,
+  breed: /clone|clonal|genotyp|genetic|breeding|snp|marker|dna|heritab|germplasm|genom|progeny|hybrid|incompatib|tissue culture|somatic|pollinat/,
+  agro: /soil|fertili|nutrient|planting|agronom|shade|irrigation|seedling|plantlet|biochar|compost|pruning|climate|intercrop|integration|growth promot|biostimulant|rootstock|grafting/,
+  proc: /ferment|drying|roast|chocolate|cocoa butter|cocoa powder|flavou?r|processing|praline|ice cream|texture|sensory|melting|conch|couverture|spray dry|beverage|bean quality/,
+  health: /antioxidant|polyphenol|health|skin|cosmetic|nutrition|blood|therapeutic|wound|flavonoid|rats|clinical|anti-|cytotoxic|cancer|obes|diabet|hair|facial/,
+  safety: /cadmium|residue|pesticide|heavy metal|contamina|mycotoxin|validation|ochratoxin|hydrocarbon|microbiolog|food safety|regulation|salmonella|colony|detection method|authentic|adulterat/,
+  waste: /pod husk|cocoa shell|bean shell|by-product|waste|pectin|pulp|cocoa leaves|leaf|activated carbon|husk/,
+  econ: /econom|market|extension|farmer|smallholder|adoption|socio|cost|income|trade|technology transfer|survey|consumer|entrepreneur|price|export|policy|sustainab/
+};
+ART.forEach(function (x) {
+  artById[x.id] = x;
+  x.hay = (x.t + " " + x.kw.join(" ")).toLowerCase();
+  x.full = (x.hay + " " + x.a + " " + x.ab + " " + x.y).toLowerCase();
+  x.tp = Object.keys(TOPIC_RX).filter(function (k) { return TOPIC_RX[k].test(x.hay); });
+});
+var YEARS = ART.map(function (x) { return x.y; }).filter(function (y, i, arr) { return arr.indexOf(y) === i; }).sort(function (p, q) { return q - p; });
+var reads = store.list("reads").filter(function (id) { return artById[id]; });
+var jf = { q: "", y: 0, tp: "", saved: false }, jShown = 30;
+/* which papers sit behind which product (matched on title + keywords) */
+var PRODUCT_RX = {
+  terraprobe: /soil moisture|internet of things|\biot\b/, agrosense: /soil nutrient|internet of things|\biot\b|sensor/, atipm: /pod borer/, hyfer: /fertili[sz]er|zeolite/,
+  croped: /pest|disease/, geococoa: /mapping|\bgis\b|spatial/, biocontrol: /biocontrol|biological control|biopesticide|black pod/, biochar: /biochar/,
+  cocoamat: /harvesting tool|mechani[sz]/, carbon: /activated carbon/, diet: /artificial diet|sterile insect|rearing/, bioaction: /endophytic/,
+  bioshield: /biofertili[sz]er|water stress|drought|flood/, kokocorrect: /genotyping|snp|molecular marker|clone identification|fingerprint/, kokoselect: /snp|genomic selection|marker-assisted/,
+  lipstick: /lipstick|lip balm/, moisturizer: /moisturi[sz]|skin/, cleanser: /cleanser|skin/, toner: /toner|skin/, scrub: /scrub/, antiwrinkle: /wrinkle|anti-ag|skin/,
+  footcream: /foot|skin crack/, footscrub: /foot|scrub/, shampoo: /shampoo|hair|dandruff/, barshampoo: /shampoo|hair|dandruff/, conditioner: /conditioner|hair/, barconditioner: /conditioner|hair/,
+  antidandruff: /dandruff|pectin|hair/, skincare: /skin|cosmetic|acne/, energybar: /energy bar|kelulut|sacha inchi/, singleorigin: /single origin|bean-to-bar|flavou?r profile/,
+  kacipfatimah: /kacip fatimah|labisia/, tongkatali: /tongkat ali|eurycoma/, gulakelapa: /coconut sugar|sweetener/, icecream: /ice cream/, greencoa: /cocoa leaves|theobroma cacao leaves|leaf tea/,
+  flavint: /polyphenol|chewable/, spread: /spread/, probiotic: /probiotic/, keto: /sugar[- ]free|keto/, polyphenol: /polyphenol|antioxidant/, husk: /bean shell|cocoa shell|antibacterial|antimicrobial/
+};
+function papersFor(pid) { var rx = PRODUCT_RX[pid]; return rx ? ART.filter(function (x) { return rx.test(x.hay); }).slice(0, 4) : []; }
+function productsFor(x) { return PRODUCTS.filter(function (p) { return PRODUCT_RX[p.id] && p.id !== "croped" && PRODUCT_RX[p.id].test(x.hay); }).slice(0, 6); }
+function volLabel(x) { return t("vol", { v: x.v + (x.i ? "(" + x.i + ")" : "") }) + " · " + x.y; }
+function arow(x) {
+  var on = reads.indexOf(x.id) >= 0;
+  return '<article class="card arow"><a href="#/a/' + x.id + '"><span class="pill">' + volLabel(x) + "</span><h3>" + esc(x.t) + "</h3><p>" + esc(x.a) + "</p></a>" +
+    '<button class="fav" type="button" data-read="' + x.id + '" aria-pressed="' + on + '" aria-label="' + esc(t("jSaved")) + '">' + I.mark + "</button></article>";
+}
+function jMatches(x) {
+  if (jf.y && x.y !== jf.y) return false;
+  if (jf.tp && x.tp.indexOf(jf.tp) < 0) return false;
+  if (jf.saved && reads.indexOf(x.id) < 0) return false;
+  if (jf.q) return jf.q.toLowerCase().split(/\s+/).every(function (w) { return x.full.indexOf(w) >= 0; });
+  return true;
+}
+function jListHtml() {
+  var list = ART.filter(jMatches);
+  if (!list.length) return '<div class="empty"><p>' + t("jNone") + '</p><p style="margin-top:14px"><button class="btn soft" type="button" data-jclear>' + t("clear") + "</button></p></div>";
+  return '<p class="count">' + t("jCount", { n: list.length }) + '</p><div class="list">' + list.slice(0, jShown).map(arow).join("") + "</div>" +
+    (list.length > jShown ? '<p style="text-align:center;margin-top:16px"><button class="btn soft" type="button" data-jmore>' + t("jMore") + "</button></p>" : "");
+}
+function jChipsHtml() {
+  return '<button class="chip" type="button" data-jsaved aria-pressed="' + jf.saved + '">' + t("jSaved") + "</button>" + Object.keys(TOPIC_RX).map(function (k) {
+    return '<button class="chip" type="button" data-jtp="' + k + '" aria-pressed="' + (jf.tp === k) + '">' + esc(t("topics")[k]) + "</button>";
+  }).join("");
+}
+function jYearsHtml() {
+  return [0].concat(YEARS).map(function (y) { return '<button class="chip" type="button" data-jy="' + y + '" aria-pressed="' + (jf.y === y) + '">' + (y || t("jAllYears")) + "</button>"; }).join("");
+}
+function vJournal() {
+  if (!ART.length) return '<div class="page"><h1>' + t("jTitle") + "</h1></div>";
+  var first = ART[ART.length - 1], last = ART[0];
+  return '<div class="page"><h1>' + t("jTitle") + '</h1><p class="lead">' + t("jLead", { n: ART.length, v0: first.v, y0: first.y, v1: last.v, y1: last.y }) + (t("jEnOnly") ? " " + t("jEnOnly") : "") + "</p></div>" +
+    '<div class="filters" style="margin-top:14px"><label class="search">' + I.search + '<input id="jq" type="search" autocomplete="off" enterkeyhint="search" placeholder="' + esc(t("jSearch")) + '" aria-label="' + esc(t("jSearch")) + '" value="' + esc(jf.q) + '"></label>' +
+    '<div class="rowscroll" id="jyears">' + jYearsHtml() + '</div><div class="rowscroll" id="jchips">' + jChipsHtml() + '</div></div><div id="jlist">' + jListHtml() + '</div><p class="note sect">' + t("jNote") + "</p>";
+}
+function jRefresh() { $("#jlist").innerHTML = jListHtml(); $("#jyears").innerHTML = jYearsHtml(); $("#jchips").innerHTML = jChipsHtml(); }
+function citation(x) { return x.a + " (" + x.y + "). " + x.t + ". Malaysian Cocoa Journal, " + x.v + (x.i ? "(" + x.i + ")" : "") + ". https://mcj.koko.gov.my/ArticleDetail.aspx?ID=" + x.id; }
+function vArticle(id) {
+  var x = artById[id];
+  if (!x) return vJournal();
+  var on = reads.indexOf(x.id) >= 0, prods = productsFor(x);
+  var rel = ART.filter(function (o) { return o !== x; }).map(function (o) {
+    var s = 0; o.kw.forEach(function (k) { if (x.kw.some(function (q) { return q.toLowerCase() === k.toLowerCase(); })) s += 2; });
+    o.tp.forEach(function (k) { if (x.tp.indexOf(k) >= 0) s += 1; });
+    return [s, o];
+  }).filter(function (p) { return p[0] >= 2; }).sort(function (p, q) { return q[0] - p[0]; }).slice(0, 4).map(function (p) { return p[1]; });
+  return '<a class="back" href="#/journal">← ' + t("journal") + '</a><article class="paper"><span class="pill">Malaysian Cocoa Journal · ' + volLabel(x) + "</span>" +
+    "<h1>" + esc(x.t) + '</h1><p class="sub">' + esc(x.a) + "</p>" +
+    '<div class="actions"><a class="btn" href="https://mcj.koko.gov.my/ViewPDF.aspx?ID=' + x.id + '" target="_blank" rel="noopener">' + I.link + t("readPdf") + "</a>" +
+    '<button class="btn ' + (on ? "" : "soft") + '" type="button" id="aread" aria-pressed="' + on + '">' + I.mark + "<span>" + t(on ? "unsave" : "save") + "</span></button>" +
+    '<button class="btn soft" type="button" id="acite">' + t("cite") + '</button><button class="btn soft" type="button" id="ashare">' + I.share + t("share") + "</button></div>" +
+    (x.ab ? "<h2>" + t("abstract") + '</h2><p class="abs">' + esc(x.ab) + "</p>" : "") +
+    (x.kw.length ? "<h2>" + t("keywords") + '</h2><div class="needs">' + x.kw.map(function (k) { return '<a class="chip" href="#/journal" data-jkw="' + esc(k) + '">' + esc(k) + "</a>"; }).join("") + "</div>" : "") +
+    '<p style="margin-top:18px"><a class="more" href="https://mcj.koko.gov.my/ArticleDetail.aspx?ID=' + x.id + '" target="_blank" rel="noopener">' + t("jPage") + " ↗</a></p></article>" +
+    (prods.length ? '<section class="sect"><div class="secthead"><h2>' + t("jProducts") + '</h2></div><p class="lead" style="margin:-6px 0 12px;color:var(--muted)">' + t("jProductsS") + '</p><div class="hscroll">' + prods.map(card).join("") + "</div></section>" : "") +
+    (rel.length ? '<section class="sect"><h2>' + t("jRelated") + '</h2><div class="list">' + rel.map(arow).join("") + "</div></section>" : "");
+}
 var scrolls = {};
 var lastRoute = "";
 var deferredInstall = null;
@@ -125,6 +231,8 @@ var I = {
   industry: '<svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-8M21 20H3"/></svg>',
   more: '<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.300"/><circle cx="12" cy="12" r="1.300"/><circle cx="19" cy="12" r="1.300"/></svg>',
   heart: '<svg viewBox="0 0 24 24"><path d="M12 20.500s-7.500-4.600-7.500-10.200A4.300 4.300 0 0112 7.600a4.300 4.300 0 017.500 2.700c0 5.600-7.500 10.200-7.500 10.200z" stroke-linejoin="round"/></svg>',
+  mark: '<svg viewBox="0 0 24 24"><path d="M6 3.500h12v17l-6-4.500-6 4.500z" stroke-linejoin="round"/></svg>',
+  journal: '<svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 012-2h13v15H6a2 2 0 00-2 2zM4 20a2 2 0 002 2h13v-4M8 7.500h7M8 11h7"/></svg>',
   share: '<svg viewBox="0 0 24 24"><path d="M12 15V3M8 7l4-4 4 4M5 12v7a1 1 0 001 1h12a1 1 0 001-1v-7"/></svg>',
   search: '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg>',
   globe: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.500 3 14.500 0 18M12 3c-3 3.500-3 14.500 0 18"/></svg>',
@@ -193,6 +301,8 @@ function vHome() {
       '<div class="card quizcard"><h3>' + t("quizTitle") + "</h3><p>" + t("quizText") + (best ? " " + t("best", { n: best, t: QUIZ_LEN }) : "") + '</p><a class="btn" href="#/quiz">' + t("quizGo") + "</a></div>" +
     "</div></section>" +
 
+    (ART.length ? '<section class="sect"><div class="secthead"><h2>' + t("latest") + '</h2><a class="more" href="#/journal" data-jreset>' + t("jCount", { n: ART.length }) + ' →</a></div><div class="list">' + ART.slice(0, 3).map(arow).join("") + "</div></section>" : "") +
+
     '<section class="sect"><a class="card stat" href="#/industry"><div class="num">1,100×</div><p><b>' + t("statLead") + "</b></p><p>" + t("statText") + "</p><small>" + t("statMore") + " →</small></a></section>" +
 
     '<section class="sect"><div class="secthead"><h2>' + t("newest") + '</h2><a class="more" href="#/products" data-reset>' + t("seeAll") + '</a></div><div class="hscroll">' + fresh.map(card).join("") + "</div></section>" +
@@ -257,6 +367,7 @@ function vDetail(id) {
     (p.partial ? '<p class="note">' + t("partial") + "</p>" : "") +
     (p.cat !== "A" && !p.partial ? '<p class="note">' + t("health") + "</p>" : "") +
     '<p class="eyebrow" style="margin-top:16px">' + t("page", { n: p.page }) + "</p></div></article>" +
+    (function () { var ps = papersFor(id); return ps.length ? '<section class="sect"><h2>' + t("research") + '</h2><p class="lead" style="margin:-6px 0 12px;color:var(--muted)">' + t("researchS") + '</p><div class="list">' + ps.map(arow).join("") + "</div></section>" : ""; })() +
     (rel.length ? '<section class="sect"><h2>' + t("related") + '</h2><div class="hscroll">' + rel.map(card).join("") + "</div></section>" : "") +
     '<nav class="pager">' + (prev ? '<a class="card" href="#/p/' + prev.id + '"><small>← ' + t("prev") + "</small><b>" + esc(prev.name) + "</b></a>" : "<span></span>") +
     (next ? '<a class="card" href="#/p/' + next.id + '"><small>' + t("next") + " →</small><b>" + esc(next.name) + "</b></a>" : "<span></span>") + "</nav>";
@@ -360,6 +471,8 @@ function item(ic, title, sub, attrs, tag) {
 function vMore() {
   return '<div class="page"><h1>' + t("more") + '</h1><div class="list sect">' +
     item(I.heart, t("mSaved"), t("mSavedS", { n: favs.length }), 'href="#/products" data-savedlink') +
+    item(I.mark, t("mReads"), t("mReadsS", { n: reads.length }), 'href="#/journal" data-readslink') +
+    item(I.industry, t("mInd"), t("mIndS"), 'href="#/industry"') +
     item(I.info, t("mAbout"), t("mAboutS"), 'href="#/about"') +
     item(I.pin, t("mDir"), t("mDirS", { n: OFFICES.length }), 'href="#/directory"') +
     item(I.link, t("mSite"), t("mSiteS"), 'href="https://www.koko.gov.my/" target="_blank" rel="noopener"') +
@@ -387,14 +500,16 @@ function vDirectory() {
 }
 
 /* ── router ── */
-var TABS = [["", "home"], ["products", "products"], ["quiz", "quiz"], ["industry", "industry"], ["more", "more"]];
+var TABS = [["", "home"], ["products", "products"], ["journal", "journal"], ["quiz", "quiz"], ["more", "more"]];
 function route() { return location.hash.replace(/^#\/?/, ""); }
 function render(keepScroll) {
   var r = route(), parts = r.split("/"), html, tab = parts[0];
   if (parts[0] === "p") { html = vDetail(parts[1]); tab = "products"; }
   else if (r === "products") html = vProducts();
   else if (r === "quiz") html = vQuiz();
-  else if (r === "industry") html = vIndustry();
+  else if (parts[0] === "a") { html = vArticle(+parts[1]); tab = "journal"; }
+  else if (r === "journal") html = vJournal();
+  else if (r === "industry") { html = vIndustry(); tab = "more"; }
   else if (r === "more") html = vMore();
   else if (r === "about") { html = vAbout(); tab = "more"; }
   else if (r === "directory") { html = vDirectory(); tab = "more"; }
@@ -404,7 +519,7 @@ function render(keepScroll) {
     return '<a href="#/' + x[0] + '"' + (x[0] === tab ? ' aria-current="page"' : "") + ">" + I[x[1]] + "<span>" + t(x[1]) + "</span></a>";
   }).join("");
   if (r === "industry") wireCharts();
-  if (!keepScroll) window.scrollTo(0, (r === "products" && scrolls.products) || 0);
+  if (!keepScroll) window.scrollTo(0, (r === "products" && scrolls.products) || (r === "journal" && scrolls.journal) || 0);
   lastRoute = r;
 }
 function applyLang() {
@@ -431,6 +546,7 @@ function showLangPick(on) {
 /* ── events ── */
 window.addEventListener("hashchange", function () {
   if (lastRoute === "products") scrolls.products = window.scrollY;
+  if (lastRoute === "journal") scrolls.journal = window.scrollY;
   if (route() !== "quiz" && route().indexOf("p/") !== 0) qz = null;
   render();
 });
@@ -441,13 +557,43 @@ $("#langpick").onclick = function (e) {
 $("#tabs").addEventListener("click", function (e) {
   var a = e.target.closest("a");
   if (a && a.getAttribute("href") === "#/products") scrolls.products = 0;
+  if (a && a.getAttribute("href") === "#/journal") scrolls.journal = 0;
 });
 
 document.addEventListener("click", function (e) {
-  var el = e.target.closest("[data-fav],[data-cat],[data-tag],[data-reset],[data-surprise],[data-catf],[data-tagf],[data-saved],[data-clear],[data-qstart],[data-opt],[data-qnext],[data-langpick],[data-install],[data-resetpass],[data-savedlink],#dfav,#dshare");
+  var el = e.target.closest("[data-fav],[data-cat],[data-tag],[data-reset],[data-surprise],[data-catf],[data-tagf],[data-saved],[data-clear],[data-qstart],[data-opt],[data-qnext],[data-langpick],[data-install],[data-resetpass],[data-savedlink],[data-read],[data-jy],[data-jtp],[data-jsaved],[data-jclear],[data-jmore],[data-jkw],[data-jreset],[data-readslink],#dfav,#dshare,#aread,#acite,#ashare");
   if (!el) return;
   var d = el.dataset;
   if ("fav" in d) { e.preventDefault(); el.setAttribute("aria-pressed", toggleFav(d.fav)); if (filt.saved && route() === "products") refreshGrid(); return; }
+  if ("read" in d || el.id === "aread") {
+    e.preventDefault();
+    var rid = "read" in d ? +d.read : +route().split("/")[1], ri = reads.indexOf(rid);
+    if (ri >= 0) reads.splice(ri, 1); else reads.push(rid);
+    store.set("reads", JSON.stringify(reads)); snack(t(ri >= 0 ? "removedMsg" : "savedMsg"));
+    el.setAttribute("aria-pressed", ri < 0);
+    if (el.id === "aread") { el.classList.toggle("soft", ri >= 0); $("span", el).textContent = t(ri < 0 ? "unsave" : "save"); }
+    else if (jf.saved && route() === "journal") jRefresh();
+    return;
+  }
+  if ("jy" in d) { jf.y = +d.jy; jShown = 30; jRefresh(); return; }
+  if ("jtp" in d) { jf.tp = jf.tp === d.jtp ? "" : d.jtp; jShown = 30; jRefresh(); return; }
+  if ("jsaved" in d) { jf.saved = !jf.saved; jShown = 30; jRefresh(); return; }
+  if ("jclear" in d) { jf = { q: "", y: 0, tp: "", saved: false }; render(); return; }
+  if ("jmore" in d) { jShown += 30; $("#jlist").innerHTML = jListHtml(); return; }
+  if ("jkw" in d) { jf = { q: d.jkw, y: 0, tp: "", saved: false }; jShown = 30; scrolls.journal = 0; return; }
+  if ("jreset" in d) { jf = { q: "", y: 0, tp: "", saved: false }; jShown = 30; scrolls.journal = 0; return; }
+  if ("readslink" in d) { jf = { q: "", y: 0, tp: "", saved: true }; jShown = 30; scrolls.journal = 0; return; }
+  if (el.id === "acite") {
+    var cx = artById[+route().split("/")[1]];
+    if (navigator.clipboard) navigator.clipboard.writeText(citation(cx)).then(function () { snack(t("cited")); }, function () {});
+    return;
+  }
+  if (el.id === "ashare") {
+    var sx = artById[+route().split("/")[1]], sd = { title: sx.t, text: sx.t + " (Malaysian Cocoa Journal, " + sx.y + ")", url: location.href };
+    if (navigator.share) navigator.share(sd).catch(function () {});
+    else if (navigator.clipboard) navigator.clipboard.writeText(sd.url).then(function () { snack(t("copied")); }, function () {});
+    return;
+  }
   if ("cat" in d) { filt = { cat: d.cat, tag: "", q: "", saved: false }; scrolls.products = 0; return; }
   if ("tag" in d) { filt = { cat: "", tag: d.tag, q: "", saved: false }; scrolls.products = 0; return; }
   if ("savedlink" in d) { filt = { cat: "", tag: "", q: "", saved: true }; scrolls.products = 0; return; }
@@ -487,6 +633,7 @@ document.addEventListener("click", function (e) {
   }
 });
 document.addEventListener("input", function (e) {
+  if (e.target.id === "jq") { jf.q = e.target.value.trim(); jShown = 30; $("#jlist").innerHTML = jListHtml(); }
   if (e.target.id === "q") { filt.q = e.target.value.trim(); $("#grid").innerHTML = gridHtml(); }
 });
 window.addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); deferredInstall = e; if (route() === "more") render(true); });
